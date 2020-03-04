@@ -7,25 +7,33 @@ from Tarefa import *
 from Usuario import *
 '''
 sep é o caractere usado pelo SO para diferenciar pastas de arquivos
+sep is the char that the operating system use for to differentiate directories of files
 '''
 # Nome do diretório que irá armazenar as tarefas dos usuários
-NOME_DIRETORIO_TAREFAS = "tarefas"
+# Dir name that will to store the tasks of all users
+NAME_DIR_TASKS = "tarefas"
 # Caminho onde o script se encontra
-CAMINHO_SCRIPT = getcwd()
+# Path of file (script) funcoes
+PATH_SCRIPT = getcwd()
 
 
 # Tem como parâmetro uma string
+# Has a string as a parameter
+# Encrypt the string using SHA512 algorithm of encryption
 # Aplica a função hashing sha512 a string e retorna o digest
 # Retorna uma hash SHA512 da senha em forma hexadecimal
-def encriptar(senha: str) -> object:
+# Return a hash SHA512 of string (senha) in hexadecimal format
+def encrypt(passwd: str) -> str:
     digest = sha512()
-    digest.update(senha.encode('utf-8'))
+    digest.update(passwd.encode('utf-8'))
     return digest.hexdigest()
 
 
+# Clear the screen
 # Limpa a tela do computador (funciona em linux e windows)
 # Retorna None
-def limpar_tela() -> None:
+# Return None
+def cls() -> None:
     system('cls' if name == 'nt' else 'clear')
     return None
 
@@ -39,25 +47,35 @@ def identificar_SO() -> int:
 
 
 # Não há parâmetro
+# Dont has parameters
 # A função lê um inteiro, ou seja, ela obriga o usuário
+# The function read an integer
 # a digitar um valor do tipo inteiro
+# it forces the user to enter an integer value
 # Retorna o valor digitado
-def ler_inteiro() -> int:
+# Return the value typed
+def read_int() -> int:
     while True:
         try:
-            inteiro = int(input('> '))
-            return inteiro
+            integer = int(input('> '))
+            return integer
         except ValueError:
             pass
 
 
 # Menu principal do sistema
+# Main menu of system
 # Exibe as opções para o usuário
+# Show the options for the user
 # Retorna a função ler_inteiro
+# Return the function read_int
 # Porém coloquei que retorna um inteiro pois a
+# i set the return as int because i can't
+# uses a function as return indicator
+# ex: (def main_menu() -> read_int)
 # a função leia_inteiro retorna um inteiro
-def menu() -> int:
-    limpar_tela()
+def main_menu() -> int:
+    cls()
     print('_' * 33)
     print()
     print("|     GERENCIADOR DE TAREFAS    |")
@@ -66,58 +84,75 @@ def menu() -> int:
     print("[ 1 ] - Cadastrar novo usuario")
     print('[ 2 ] - Logar no sistema')
     print("[ 3 ] - Sair do sistema")
-    return ler_inteiro()
+    return read_int()
 
 
 # Exibe as opções disponíveis para
 # os usuários logados no sistema
+# Show the options available for the user
+# logged in the system
 # Retorna a função ler_inteiro
+# Return read_int function
+# i set the return as int because i can't
+# uses a function as return indicator
+# ex: (def main_menu() -> read_int)
 def sub_menu() -> int:
-    limpar_tela()
+    cls()
     print("[ 1 ] - Cadastrar nova Tarefa")
     print("[ 2 ] - Visualizar Tarefas")
     print("[ 3 ] - Alterar Tarefa")
     print("[ 4 ] - Excluir Tarefa")
     print("[ 5 ] - Sair")
-    return ler_inteiro()
+    return read_int()
 
 
 # Exibe o mini menu da prioridade da tarefa a cadastrada
+# Show a mini menu of priority of task to be registered
 # Retorna a função ler_inteiro
+# Return read_int function
 # Porém coloquei que retorna um inteiro pois a
 # a função leia_inteiro retorna um inteiro
-def menu_prioridade_tarefa() -> int:
+# i set the return as int because i can't
+# uses a function as return indicator
+# ex: (def main_menu() -> read_int)
+def menu_priority_task() -> int:
     print("\033[1m  PRIORIDADE DA TAREFA\033[m")
     print("[ 1 ] - Prioridade Baixa")
     print("[ 2 ] - Prioridade Media")
     print("[ 3 ] - Prioridade ALta")
-    return ler_inteiro()
+    return read_int()
 
 
 # Não possui parâmetros
+# Dont has parameter
 # Congela a tela durante 4.2 segundos
+# Freeze screen during 4.2 seconds
 # Retrona None
-def congelar_tela() -> None:
+# Return None
+def freeze_screen() -> None:
     sleep(4.2)
     return None
 
 
 # Tem como parâmetro, três strings, senha do usuário, nome do
 # usuário e o nome do arquivo a ser manipulado
+# Has 3 parameters, 3 strings, password of user, name of user
+# and the file name to be manipulated
 # Autentica o usuário no sistema
+# Authenticates the user on the system
 # Retorna True caso o usuário for autenticado com sucesso
 # e False caso contrário
-def autenticar_usuario(login: str, senha: str, nome_arq: str) -> bool:
-    # Abrindo o arquivo que guarda os usuários
-    with open(nome_arq) as arquivo:
-        # Iterando o arquivo
-        for linha in arquivo:
-            # Removendo o \n da linha encontrada e desemenbrando a linha
-            linha = linha[:-1].split(' ')
+# Return True, case the user was authenticated and False, otherwise
+def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
+    with open(file_name) as file:
+        for line in file:
+            linha = line[:-1].split(' ')
             # Verificando se o login e senha digitados estão corretos
-            if login == linha[0] and linha[1] == encriptar(senha):
+            # Verify login and passwd
+            if login == line[0] and line[1] == encrypt(passwd):
                 return True
         # Caso o login e senha digitados não estejam corretos
+        # Case the login and passwd entered are not correct
         return False
 
 
@@ -125,7 +160,7 @@ def autenticar_usuario(login: str, senha: str, nome_arq: str) -> bool:
 # e o caminho a ser verificado, por padrão ele tem como valor o caminho
 # atual do arquivo .py
 # Verifica se um arquivo existe, pelo nome
-# Retorna True caso o arquivo exista, e False caso não
+# Retorna True caso o arquivo exista, e False caso não                                    # Retirar esse caminho aí, a função serve para criar o arquivo e nada mais
 def arquivo_existe(nome_arq: str, caminho: str = getcwd()) -> bool:
     # Caminho onde o script se localiza
     global CAMINHO_SCRIPT
@@ -139,28 +174,6 @@ def arquivo_existe(nome_arq: str, caminho: str = getcwd()) -> bool:
     # Voltando para o diretório onde o script se localiza
     chdir(CAMINHO_SCRIPT)
     return False
-
-
-'''# Tem como parâmetro uma string, o nome do usuário
-# Verifica se a string é "nula", se o login é composto
-# somente por caracter nulo, também verifica se há
-# caracteres em branco no nome, além de eliminar os caracteres em
-# branco do nome (a esquerda e a direita do nome)
-# Retorna True caso a string seja "válida" e False caso não
-def validar_nome(nome: str) -> bool:
-    # Stripando a string, tirando os espaços ao redor
-    nome = nome.strip()
-    # Verificando se a string é "nula"
-    if nome:
-        for caractere in nome:
-            # Verificando se a string de 8 bits é um espaço
-            if caractere.isspace():
-                return False
-        # Caso não encontre nenhum caractere "em branco"
-        return True
-    # Caso a string seja "nula"
-    return False
-'''
 
 
 # Tem como parâmetro uma string, o nome do arquivo
@@ -206,20 +219,20 @@ def ordenar_tarefa(lista: list):
 def cadastrar_usuario(usuario: Usuario, nome_arq: str) -> bool:
     # Gravando o nome e o hash da senha do usuário no arquivo "nome_arq"
     with open(nome_arq, 'a', encoding='utf-8') as arquivo:
-        arquivo.write(usuario.get_nome() + " " + encriptar(usuario.get_senha()) + '\n')
+        arquivo.write(usuario.get_nome() + " " + encrypt(usuario.get_senha()) + '\n')
     # Criando o diretório com o nome do usuário e que irá guardar suas tarefas
-    criar_diretorio(usuario.get_nome(), CAMINHO_SCRIPT + sep + NOME_DIRETORIO_TAREFAS)
+    criar_diretorio(usuario.get_nome(), PATH_SCRIPT + sep + NAME_DIR_TASKS)
     # Caminho onde o arquivo binário será criado
-    caminho_arq_binario = CAMINHO_SCRIPT + sep + NOME_DIRETORIO_TAREFAS + sep + usuario.get_nome() + sep
+    caminho_arq_binario = PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome() + sep
     # Criando o arquivo em modo binário que guarda as tarefas do usuário
     criar_arquivo(usuario.get_nome() + "_tarefas.pbl", 1, caminho_arq_binario)
     # Criando o arquivo em modo binário que guarda a ultima ocorrência do ID da tarefa
     criar_arquivo(usuario.get_nome() + ".i", 1, caminho_arq_binario)
     # Mudando para o diretório onde se encontra o arquivo binário ".i"
-    chdir(CAMINHO_SCRIPT + sep + NOME_DIRETORIO_TAREFAS + sep + usuario.get_nome())
+    chdir(PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome())
     append_b(0, usuario.get_nome() + ".i")
     # Voltando para o diretório do script
-    chdir(CAMINHO_SCRIPT)
+    chdir(PATH_SCRIPT)
     return True
 
 
@@ -329,7 +342,7 @@ def criar_diretorio(nome_diretorio: str, caminho: str = getcwd()) -> int:
     # Caso o nome do diretório seja uma string nula
     if nome_diretorio:
         # Caminho onde o script se localiza
-        global CAMINHO_SCRIPT
+        global PATH_SCRIPT
         # Mudando de diretório informado pelo usuário
         chdir(caminho)
         try:
@@ -340,7 +353,7 @@ def criar_diretorio(nome_diretorio: str, caminho: str = getcwd()) -> int:
             pass
         finally:
             # Voltando para o diretório onde o script se localiza
-            chdir(CAMINHO_SCRIPT)
+            chdir(PATH_SCRIPT)
         return 0
     # Caso o nome do diretório seja uma string nula
     return 0
@@ -350,9 +363,9 @@ def criar_diretorio(nome_diretorio: str, caminho: str = getcwd()) -> int:
 # do tipo tarefa
 # Cadastra uma nova tarefa no usuário passado como argumento
 def cadastrar_tarefa(tarefa: Tarefa, nome_usuario: str) -> bool:
-    global CAMINHO_SCRIPT
+    global PATH_SCRIPT
     caminho_padrao = getcwd()
-    caminho_arq_binario = getcwd() + sep + NOME_DIRETORIO_TAREFAS + sep + nome_usuario + sep
+    caminho_arq_binario = getcwd() + sep + NAME_DIR_TASKS + sep + nome_usuario + sep
     # Mudando para o diretório onde se encontra o arquivo do usuário
     chdir(caminho_arq_binario)
     append_b(1, nome_usuario + '_tarefas.pbl')
