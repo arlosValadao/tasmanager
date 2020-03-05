@@ -157,11 +157,11 @@ def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
 
 
 # Tem como parâmetro duas strings, o nome do arquivo a ser verificado
-# e o caminho a ser verificado, por padrão ele tem como valor o caminho
+# e o caminho a ser verificado, por padrão ele tem como valor o caminho  # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
 # atual do arquivo .py
 # Verifica se um arquivo existe, pelo nome
-# Retorna True caso o arquivo exista, e False caso não                                    # Retirar esse caminho aí, a função serve para criar o arquivo e nada mais
-def arquivo_existe(nome_arq: str, caminho: str = getcwd()) -> bool:
+# Retorna True caso o arquivo exista, e False caso não
+def file_exists(file_name: str, path: str = getcwd()) -> bool:
     # Caminho onde o script se localiza
     global CAMINHO_SCRIPT
     # Mudando para o diretório do caminho informado pelo usuário
@@ -184,25 +184,20 @@ def arquivo_existe(nome_arq: str, caminho: str = getcwd()) -> bool:
 # Cria um arquivo de texto ou binário
 # Retorna 1 caso o arquivo foi criado com sucesso
 # Retorna 0 caso o arquivo já exista
-def criar_arquivo(nome_arq: str, tipo_arq: int, caminho=getcwd()) -> int:
-    # Caminho onde o script se localiza
-    global CAMINHO_SCRIPT
-    # Mudando de diretório informado pelo usuário
-    chdir(caminho)
+def create_file(file_name: str, file_type: int) -> int:
     try:
         # Criando o arquivo
         arquivo = open(nome_arq, 'x') if tipo_arq == 0 else open(nome_arq, 'xb')
         arquivo.close()
         return 1
     except FileExistsError:
-        pass
-    finally:
-        chdir(CAMINHO_SCRIPT)
+    	pass
     return 0
 
 
+
 # Tem como parâmetro uma lista do tipo list
-# Ordena a lista de acordo com a prioridade                     # PRECISO DEFINIR EM QUE POSIÇÃO VAI FICAR O VALOR QUE SIMBOLIZA A PRIORIDADE, ACREDITO QUE SERÁ LOGO NA PRIMEIRA
+# Ordena a lista de acordo com a prioridade
 # Retorna a lista ordenada
 def ordenar_tarefa(lista: list):
     for i in range(len(lista) - 1):
@@ -211,26 +206,32 @@ def ordenar_tarefa(lista: list):
                 lista[i], lista[j] = lista[j], lista[i]
 
 
-# Tem como parâmetro um objeto do tipo Usuario e uma string
+
+# Tem como parâmetro um objeto do tipo Usuario e uma string  # Mover isso daqui para o main, deixar a funcao de cadastrar o usuario somente para salvar o login e senha no arquivo
 # o nome do arquivo no qual as informações vão ser gravadas
 # Cadastra um usuário no sistema, melhor dizendo, insere
 # o nome e senha do usuário no arquivo em modo de texto que
 # guarda todos os usuários do sistema
 def cadastrar_usuario(usuario: Usuario, nome_arq: str) -> bool:
     # Gravando o nome e o hash da senha do usuário no arquivo "nome_arq"
-    with open(nome_arq, 'a', encoding='utf-8') as arquivo:
+    with open(nome_arq, 'a', encoding = 'utf-8') as arquivo:
         arquivo.write(usuario.get_nome() + " " + encrypt(usuario.get_senha()) + '\n')
     # Criando o diretório com o nome do usuário e que irá guardar suas tarefas
     criar_diretorio(usuario.get_nome(), PATH_SCRIPT + sep + NAME_DIR_TASKS)
     # Caminho onde o arquivo binário será criado
     caminho_arq_binario = PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome() + sep
+    # Mudando para o diretório onde será criado os arquivos binários
+    chdir(caminho_arq_binario)
     # Criando o arquivo em modo binário que guarda as tarefas do usuário
-    criar_arquivo(usuario.get_nome() + "_tarefas.pbl", 1, caminho_arq_binario)
+    criar_arquivo(usuario.get_nome() + "_tarefas.pbl", 1)
     # Criando o arquivo em modo binário que guarda a ultima ocorrência do ID da tarefa
-    criar_arquivo(usuario.get_nome() + ".i", 1, caminho_arq_binario)
+    criar_arquivo(usuario.get_nome() + ".i", 1)
+    # Adicionando o valor do id no arquivo do usuario
+    append_b(0, usuario.get_nome() + ".i")
+    # Mudando para o caminho do script
+    chdir(PATH_SCRIPT)
     # Mudando para o diretório onde se encontra o arquivo binário ".i"
     chdir(PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome())
-    append_b(0, usuario.get_nome() + ".i")
     # Voltando para o diretório do script
     chdir(PATH_SCRIPT)
     return True
@@ -256,39 +257,6 @@ def login_existe(login: str, nome_arq: str) -> bool:
     return False
 
 
-'''# Tem como parâmetro uma string
-# Remove os caracteres barra string
-# Retorna a string sem os caracteres barra
-def remover_barra(texto: str) -> str:
-    # Contador de barras da string
-    contador_barras = texto.count('/')
-    # Convertendo a string para lista
-    texto = list(texto)
-    # Removendo as barras da string
-    for i in range(contador_barras):
-        texto.remove('/')
-    # Convertendo a lista para string
-    texto = ''.join(texto)
-    return texto
-
-
-# Tem como parâmetro uma string
-# Remove os caracteres contra-barra da string
-# Retorna a string sem os caracteres contra barra
-def remover_contra_barra(texto: str) -> str:
-    # Contador de contra-barras da string
-    contador_contra_barra = texto.count('\\')
-    # Convertendo a string para lista
-    texto = list(texto)
-    # Removendo as contra-barras da string
-    for i in range(contador_contra_barra):
-        texto.remove('\\')
-    # Convertendo a lista para string
-    texto = ''.join(texto)
-    return texto
-'''
-
-
 # Tem como parâmetro uma string, o nome do arquivo a ser lido
 # A função trabalha somente com arquivo .dat
 # Lê um arquivo binário e retorna uma tupla contendo as linhas
@@ -296,7 +264,7 @@ def remover_contra_barra(texto: str) -> str:
 def read_b(nome_arq: str) -> tuple:
     linhas = []
     # Abrindo o arquivo para leitura
-    arquivo = open(nome_arq, 'rb')
+    arquivo = open(nome_arq, 'rb', encoding = "utf-8")
     while True:
         try:
             # Adicionando a linha lida a lista de linhas
@@ -321,7 +289,7 @@ def mudar_diretorio(caminho: str) -> bool:
 # A função concatena texto no arquivo, ela abre o arquivo no modo append
 # Retorna True caso consiga escrever no arquivo e False caso contrário
 def append_b(valor, nome_arq: str) -> int:
-    arquivo = open(nome_arq, "ab")
+    arquivo = open(nome_arq, "ab", encoding = "utf-8")
     dump(valor, arquivo)
     arquivo.close()
     return 1

@@ -1,19 +1,24 @@
 class Task:
-    def __init__(self, titule: str, description: str, priority: int): # Change the priority for str type
-        self.__titule: str = titule
+    def __init__(self, title: str, description: str, priority: int):
         self.__description: str = description
         self.__priority: int = priority
 
-    def get_titule(self):
-        return self.__titule
+    def get_title(self):
+        return self.__title
 
-    def set_titule(self, titule: str):
-        self.__titulo = titule
+    def set_title(self, title: str):
+    	if "str" not in type(title):
+    		return None
+        self.__title = title
 
     def get_description(self):
+   		if "str" not in title:
+    		return None
         return self.__description
 
-    def set_descricao(self, description: str):
+    def set_description(self, description: str):
+    	if "str" not in type(description):
+    		return None
         self.__description = description
 
     def get_priority(self):
