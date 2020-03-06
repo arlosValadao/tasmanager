@@ -3,7 +3,7 @@ class Task:
     	self.__title: str = title
         self.__description: str = description
         self.__priority: int = priority
-        self.__tasks: list = []
+
 
     def get_title(self):
         return self.__title
@@ -28,15 +28,3 @@ class Task:
         if 4 > priority > 0:
             self.__priority = priority
         return None
-
-    def get_tasks():
-    	return self.__tasks
-
-    def set_tasks(tasks: list):
-    	self.__tasks = tasks
-
-    def set_task(task: Task):
-    	if type(task) == "<class 'Task.Task'>"
-    		if task.get_description == 1:				# Incomplete
-    			self.__tasks.insert(task, 0)
-    	return -1
