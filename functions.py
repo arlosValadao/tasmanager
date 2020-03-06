@@ -5,24 +5,20 @@ from pickle import dump, load
 from time import sleep
 from Tarefa import *
 from Usuario import *
+
 '''
-sep é o caractere usado pelo SO para diferenciar pastas de arquivos
 sep is the char that the operating system use for to differentiate directories of files
 '''
-# Nome do diretório que irá armazenar as tarefas dos usuários
+
 # Dir name that will to store the tasks of all users
 NAME_DIR_TASKS = "tarefas"
-# Caminho onde o script se encontra
 # Path of file (script) funcoes
 PATH_SCRIPT = getcwd()
 
 
-# Tem como parâmetro uma string
 # Has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
-# Aplica a função hashing sha512 a string e retorna o digest
-# Retorna uma hash SHA512 da senha em forma hexadecimal
-# Return a hash SHA512 of string (senha) in hexadecimal format
+# Returns a hash SHA512 of string (senha) in hexadecimal format
 def encrypt(passwd: str) -> str:
     digest = sha512()
     digest.update(passwd.encode('utf-8'))
@@ -30,30 +26,17 @@ def encrypt(passwd: str) -> str:
 
 
 # Clear the screen
-# Limpa a tela do computador (funciona em linux e windows)
-# Retorna None
-# Return None
+# Returns None
 def cls() -> None:
     system('cls' if name == 'nt' else 'clear')
     return None
 
 
-'''# Identifica o SO que roda na máquina do usuário
-# Retorna 1 se o sistema for windows
-# e -1 caso contrário
-def identificar_SO() -> int:
-    tipo_SO = name
-    return 1 if tipo_SO == 'nt' else -1'''
-
-
-# Não há parâmetro
 # Dont has parameters
-# A função lê um inteiro, ou seja, ela obriga o usuário
 # The function read an integer
 # a digitar um valor do tipo inteiro
 # it forces the user to enter an integer value
-# Retorna o valor digitado
-# Return the value typed
+# Returns the value typed
 def read_int() -> int:
     while True:
         try:
@@ -63,17 +46,12 @@ def read_int() -> int:
             pass
 
 
-# Menu principal do sistema
 # Main menu of system
-# Exibe as opções para o usuário
 # Show the options for the user
-# Retorna a função ler_inteiro
-# Return the function read_int
-# Porém coloquei que retorna um inteiro pois a
+# Returns the function read_int
 # i set the return as int because i can't
 # uses a function as return indicator
 # ex: (def main_menu() -> read_int)
-# a função leia_inteiro retorna um inteiro
 def main_menu() -> int:
     cls()
     print('_' * 33)
@@ -87,12 +65,9 @@ def main_menu() -> int:
     return read_int()
 
 
-# Exibe as opções disponíveis para
-# os usuários logados no sistema
 # Show the options available for the user
 # logged in the system
-# Retorna a função ler_inteiro
-# Return read_int function
+# Returns read_int function
 # i set the return as int because i can't
 # uses a function as return indicator
 # ex: (def main_menu() -> read_int)
@@ -106,12 +81,8 @@ def sub_menu() -> int:
     return read_int()
 
 
-# Exibe o mini menu da prioridade da tarefa a cadastrada
 # Show a mini menu of priority of task to be registered
-# Retorna a função ler_inteiro
-# Return read_int function
-# Porém coloquei que retorna um inteiro pois a
-# a função leia_inteiro retorna um inteiro
+# Returns read_int function
 # i set the return as int because i can't
 # uses a function as return indicator
 # ex: (def main_menu() -> read_int)
@@ -123,80 +94,62 @@ def menu_priority_task() -> int:
     return read_int()
 
 
-# Não possui parâmetros
 # Dont has parameter
-# Congela a tela durante 4.2 segundos
 # Freeze screen during 4.2 seconds
-# Retrona None
-# Return None
+# Returns None
 def freeze_screen() -> None:
     sleep(4.2)
     return None
 
 
-# Tem como parâmetro, três strings, senha do usuário, nome do
-# usuário e o nome do arquivo a ser manipulado
 # Has 3 parameters, 3 strings, password of user, name of user
 # and the file name to be manipulated
-# Autentica o usuário no sistema
 # Authenticates the user on the system
-# Retorna True caso o usuário for autenticado com sucesso
-# e False caso contrário
-# Return True, case the user was authenticated and False, otherwise
+# Returns True, case the user was authenticated and False, otherwise
 def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
-    with open(file_name) as file:
+    with open(file_name, encoding = "utf-8") as file:
         for line in file:
             linha = line[:-1].split(' ')
-            # Verificando se o login e senha digitados estão corretos
-            # Verify login and passwd
+            # Verifying login and passwd
             if login == line[0] and line[1] == encrypt(passwd):
                 return True
-        # Caso o login e senha digitados não estejam corretos
         # Case the login and passwd entered are not correct
         return False
 
 
-# Tem como parâmetro duas strings, o nome do arquivo a ser verificado
-# e o caminho a ser verificado, por padrão ele tem como valor o caminho  # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
-# atual do arquivo .py
-# Verifica se um arquivo existe, pelo nome
-# Retorna True caso o arquivo exista, e False caso não
-def file_exists(file_name: str, path: str = getcwd()) -> bool:
-    # Caminho onde o script se localiza
-    global CAMINHO_SCRIPT
-    # Mudando para o diretório do caminho informado pelo usuário
-    chdir(caminho)
-    # Verificando se o arquivo existe
-    if path.exists(nome_arq):
-        # Voltando para o diretório onde o script se localiza
-        chdir(CAMINHO_SCRIPT)
+                                             # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
+# Has two parameters, 2 strings, the name of file and the path of file.
+# Verifies if the file exists, trough of file name
+# Returns True case the file exists and False otherwise
+def file_exists(file_name: str, path: str) -> bool:
+    # Directory that the function was called
+    source_path = getcwd()
+    chdir(path)
+    # Verifying if the file exists
+    if path.exists(file_name):
+        chdir(source_path)
         return True
-    # Voltando para o diretório onde o script se localiza
-    chdir(CAMINHO_SCRIPT)
+    chdir(source_path)
     return False
 
 
-# Tem como parâmetro uma string, o nome do arquivo
-# e um inteiro, o tipo do arquivo, respectivamente.
-# Para o tipo do arquivo: 0- simboliza arquivo
-# em modo de texto e qualquer numero diferente
-# de 0 simboliza o arquivo em modo binário
-# Cria um arquivo de texto ou binário
-# Retorna 1 caso o arquivo foi criado com sucesso
-# Retorna 0 caso o arquivo já exista
+# Has a string (file name), an integer (type of file)
+# For the file type, 0 symbolizes a file in text mode
+# and any number different of 0 symbolizes a file in binary mode
+# Returns a int, 1 case the file was successful created
+# and 0 otherwise
 def create_file(file_name: str, file_type: int) -> int:
     try:
-        # Criando o arquivo
+        # Conditional assignment
         arquivo = open(nome_arq, 'x') if tipo_arq == 0 else open(nome_arq, 'xb')
         arquivo.close()
         return 1
     except FileExistsError:
-    	pass
-    return 0
+        return 0
 
 
 
-# Tem como parâmetro uma lista do tipo list
+'''# Tem como parâmetro uma lista do tipo list
 # Ordena a lista de acordo com a prioridade
 # Retorna a lista ordenada
 def ordenar_tarefa(lista: list):
@@ -204,7 +157,7 @@ def ordenar_tarefa(lista: list):
         for j in range(i + 1, len(lista)):
             if lista[i] > lista[j]:
                 lista[i], lista[j] = lista[j], lista[i]
-
+'''
 
 
 # Tem como parâmetro um objeto do tipo Usuario e uma string  # Mover isso daqui para o main, deixar a funcao de cadastrar o usuario somente para salvar o login e senha no arquivo
@@ -212,7 +165,7 @@ def ordenar_tarefa(lista: list):
 # Cadastra um usuário no sistema, melhor dizendo, insere
 # o nome e senha do usuário no arquivo em modo de texto que
 # guarda todos os usuários do sistema
-def cadastrar_usuario(usuario: Usuario, nome_arq: str) -> bool:
+def register_user(user: User, file_name: str) -> bool:
     # Gravando o nome e o hash da senha do usuário no arquivo "nome_arq"
     with open(nome_arq, 'a', encoding = 'utf-8') as arquivo:
         arquivo.write(usuario.get_nome() + " " + encrypt(usuario.get_senha()) + '\n')
@@ -237,42 +190,37 @@ def cadastrar_usuario(usuario: Usuario, nome_arq: str) -> bool:
     return True
 
 
-# Tem como parâmetro duas strings a primeira refere-se ao login
-# (nome do usuário) e o segundo corresponde ao nome do arquivo
-# A função verifica se o login está contido no arquivo ou não
-# Retorna True caso o nome já esteja contido e false caso não
-def login_existe(login: str, nome_arq: str) -> bool:
-    # Caso a string não seja vazia e os seus 4 últimos caracteres
-    # seja igual a .txt
-    if nome_arq[-4:] == ".txt":
-        with open(nome_arq) as arquivo:
-            for linha in arquivo:
-                # Convertendo a linha em uma lista com dois elementos (login e senha do usuário)
-                linha = linha.split(' ')
-                # Verificando se o login digitado é igual à algum login existente no arquivo
-                if linha[0] == login:
+# Has two strings as parameter, the first is a login and the 
+# second is the name of file
+# The function verify if the login typed already is
+# inclued in the file
+# Returns True case the file already exists and False
+# otherwise
+def login_exists(login: str, file_name: str) -> bool:
+        with open(file_name, encoding = "utf-8") as file:
+            for line in file:
+                # Converting the line in a list with login and password of user
+                line = line.split(' ')
+                if line[0] == login:
                     return True
             return False
-    # Caso o nome do arquivo não contenha .txt como seus últimos 4 caracteres
-    return False
 
 
-# Tem como parâmetro uma string, o nome do arquivo a ser lido
-# A função trabalha somente com arquivo .dat
-# Lê um arquivo binário e retorna uma tupla contendo as linhas
-# do arquivo, cada linha é um item da tupla.
-def read_b(nome_arq: str) -> tuple:
-    linhas = []
+# Has a string as parameter, name file
+# Read a binary file
+# Returns a tuple containing all lines of the file,
+# each line is an item of tuple
+def read_b(file_name: str) -> tuple:
+    file_lines = []
     # Abrindo o arquivo para leitura
-    arquivo = open(nome_arq, 'rb', encoding = "utf-8")
+    file = open (file_name, "rb", encoding = "utf-8")
     while True:
         try:
-            # Adicionando a linha lida a lista de linhas
-            linhas.append(load(arquivo))
-        # Quando chegar ao fim do arquivo
+            file_lines.append(load(file))
+        #End Of File
         except EOFError:
-            arquivo.close()
-            return tuple(linhas)
+            file.close()
+            return tuple(file_lines)
 
 
 '''# Tem como parâmetro uma string, o caminho
@@ -284,54 +232,41 @@ def mudar_diretorio(caminho: str) -> bool:
     return True'''
 
 
-# Tem como parâmetro duas strings, nome_arq corresponde ao nome do arquivo
-# a ser manipulado e texto corresponde a string a ser gravada no arquivo
-# A função concatena texto no arquivo, ela abre o arquivo no modo append
-# Retorna True caso consiga escrever no arquivo e False caso contrário
-def append_b(valor, nome_arq: str) -> int:
-    arquivo = open(nome_arq, "ab", encoding = "utf-8")
-    dump(valor, arquivo)
-    arquivo.close()
-    return 1
+# Has an string (name of file), and another variable as parameter 
+# (value), value can be anything supported for python.
+# Append a value in a file binary mode
+# Returns None
+def append_b(value, file_name: str) -> None:
+    file = open(nome_arq, "ab", encoding = "utf-8")
+    dump(valor, file)
+    file.close()
+    return None
 
 
-'''IMPORTANTE
-Nesse pequeno texto descrevo a maneira que encontrei de indentificar qual usuário está logado
-no sistema, quando o usuário loga no sistema eu adiciono um caractere espaço no final da linha
-que corresponde às informações dele'''
-
-
-# Tem como parâmetro duas strings, a primeira corresponde ao nome da pasta
-# e a segunda ao caminho, ou seja onde a pasta deve ser criada, por padrão, "caminho"
-# é o caminho atual
-# Retorna 1 caso consiga criar a pasta e 0 caso a pasta já exista ou o nome do diretório
-# seja "null"
-def criar_diretorio(nome_diretorio: str, caminho: str = getcwd()) -> int:
-    # Caso o nome do diretório seja uma string nula
-    if nome_diretorio:
-        # Caminho onde o script se localiza
-        global PATH_SCRIPT
-        # Mudando de diretório informado pelo usuário
-        chdir(caminho)
+# Has as parameter an string, the directory or the directory + path
+# The function make a directory
+# Returns 1 when the file is create successful  and 0
+# otherwise, when already exists the file or
+# the path is invalid
+def make_dir(dir_name: str) -> int:
+    if dir_name:
         try:
-            # Criando o diretório
-            mkdir(nome_diretorio)
+        	# Creating the directory
+            mkdir(dir_name)
             return 1
+        # Case the directory already exists
         except FileExistsError:
-            pass
-        finally:
-            # Voltando para o diretório onde o script se localiza
-            chdir(PATH_SCRIPT)
-        return 0
-    # Caso o nome do diretório seja uma string nula
+        	return 0
+        # Case the path doesnt exists
+        except FileNotFoundError:
+        	return 0
     return 0
 
 
 # Tem como parâmetro uma string (nome do usuário, e tarefa
 # do tipo tarefa
 # Cadastra uma nova tarefa no usuário passado como argumento
-def cadastrar_tarefa(tarefa: Tarefa, nome_usuario: str) -> bool:
-    global PATH_SCRIPT
+def register_task(task: Task, user_name: str) -> bool:
     caminho_padrao = getcwd()
     caminho_arq_binario = getcwd() + sep + NAME_DIR_TASKS + sep + nome_usuario + sep
     # Mudando para o diretório onde se encontra o arquivo do usuário
