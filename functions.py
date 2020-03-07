@@ -5,6 +5,7 @@ from pickle import dump, load
 from time import sleep
 from Tarefa import *
 from Usuario import *
+from User import *
 
 '''
 sep is the char that the operating system use for to differentiate directories of files
