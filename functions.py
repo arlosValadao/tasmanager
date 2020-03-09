@@ -3,8 +3,7 @@ from os import getcwd, chdir, system, name, mkdir
 from os import path, sep, listdir
 from pickle import dump, load
 from time import sleep
-from Tarefa import *
-from Usuario import *
+from Task import *
 from User import *
 
 '''
@@ -108,7 +107,7 @@ def freeze_screen() -> None:
 # Authenticates the user on the system
 # Returns True, case the user was authenticated and False, otherwise
 def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
-    with open(file_name, encoding = "utf-8") as file:
+    with open(file_name, encoding="utf-8") as file:
         for line in file:
             linha = line[:-1].split(' ')
             # Verifying login and passwd
@@ -117,9 +116,10 @@ def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
         # Case the login and passwd entered are not correct
         return False
 
+        # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
 
-                                             # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
-# Has two parameters, 2 strings, the name of file and the path of file.
+
+'''# Has two parameters, 2 strings, the name of file and the path of file.
 # Verifies if the file exists, trough of file name
 # Returns True case the file exists and False otherwise
 def file_exists(file_name: str, path: str) -> bool:
@@ -132,6 +132,27 @@ def file_exists(file_name: str, path: str) -> bool:
         return True
     chdir(source_path)
     return False
+'''
+
+#Sera usado em todas as opcoes quando o usuario faz o login e apos ele fazer o login
+# Has 2 string as parameter, name of directory that storage all the tasks of system,
+# and the path root of script
+# The function verifies and creates (if necessary) all files necessary
+# for the correct functionament of system, post login
+def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str):
+    # Verifying existence of directory that storage the tasks of sysem
+    make_dir(NAME_TASKS_DIR)
+    # Verifying existence of directory that storage the tasks of user registered
+    # The directory has the name of user registered
+    make_dir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
+    # Changing for the directory that have the name of user registered
+    # and storage yours tasks and id of tasks
+    chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + login)
+    # Verifying existence of binary file that storage tasks and id of tasks of user registered
+    create_file(login + "_tasks.pbl", 1)
+    create_file(login + "_id.pbl", 1)
+    # Back to root path of script
+    chdir(SCRIPT_ROOT_PATH)
 
 
 # Has a string (file name), an integer (type of file)
@@ -142,23 +163,11 @@ def file_exists(file_name: str, path: str) -> bool:
 def create_file(file_name: str, file_type: int) -> int:
     try:
         # Conditional assignment
-        arquivo = open(nome_arq, 'x') if tipo_arq == 0 else open(nome_arq, 'xb')
-        arquivo.close()
+        file = open(file_name, 'x') if file_type == 0 else open(file_name, 'xb')
+        file.close()
         return 1
     except FileExistsError:
         return 0
-
-
-
-'''# Tem como parâmetro uma lista do tipo list
-# Ordena a lista de acordo com a prioridade
-# Retorna a lista ordenada
-def ordenar_tarefa(lista: list):
-    for i in range(len(lista) - 1):
-        for j in range(i + 1, len(lista)):
-            if lista[i] > lista[j]:
-                lista[i], lista[j] = lista[j], lista[i]
-'''
 
 
 # Tem como parâmetro um objeto do tipo Usuario e uma string  # Mover isso daqui para o main, deixar a funcao de cadastrar o usuario somente para salvar o login e senha no arquivo
@@ -168,7 +177,7 @@ def ordenar_tarefa(lista: list):
 # guarda todos os usuários do sistema
 def register_user(user: User, file_name: str) -> bool:
     # Gravando o nome e o hash da senha do usuário no arquivo "nome_arq"
-    with open(nome_arq, 'a', encoding = 'utf-8') as arquivo:
+    with open(nome_arq, 'a', encoding='utf-8') as arquivo:
         arquivo.write(usuario.get_nome() + " " + encrypt(usuario.get_senha()) + '\n')
     # Criando o diretório com o nome do usuário e que irá guardar suas tarefas
     criar_diretorio(usuario.get_nome(), PATH_SCRIPT + sep + NAME_DIR_TASKS)
@@ -195,16 +204,15 @@ def register_user(user: User, file_name: str) -> bool:
 # second is the name of file
 # The function verify if the login typed already is
 # inclued in the file
-# Returns True case the file already exists and False
-# otherwise
+# Returns True case the file already exists and False otherwise
 def login_exists(login: str, file_name: str) -> bool:
-        with open(file_name, encoding = "utf-8") as file:
-            for line in file:
-                # Converting the line in a list with login and password of user
-                line = line.split(' ')
-                if line[0] == login:
-                    return True
-            return False
+    with open(file_name, encoding="utf-8") as file:
+        for line in file:
+            # Converting the line in a list with login and password of user
+            line = line.split(' ')
+            if line[0] == login:
+                return True
+        return False
 
 
 # Has a string as parameter, name file
@@ -214,23 +222,14 @@ def login_exists(login: str, file_name: str) -> bool:
 def read_b(file_name: str) -> tuple:
     file_lines = []
     # Abrindo o arquivo para leitura
-    file = open (file_name, "rb", encoding = "utf-8")
+    file = open(file_name, "rb", encoding="utf-8")
     while True:
         try:
             file_lines.append(load(file))
-        #End Of File
+        # End Of File
         except EOFError:
             file.close()
             return tuple(file_lines)
-
-
-'''# Tem como parâmetro uma string, o caminho
-# que o usuário deseja ir
-# Muda para o diretório e logo após retorna para
-# onde foi chamado
-# Retorna 1 caso ocorra tudo corretamente e False caso contrário
-def mudar_diretorio(caminho: str) -> bool:
-    return True'''
 
 
 # Has an string (name of file), and another variable as parameter 
@@ -238,7 +237,7 @@ def mudar_diretorio(caminho: str) -> bool:
 # Append a value in a file binary mode
 # Returns None
 def append_b(value, file_name: str) -> None:
-    file = open(nome_arq, "ab", encoding = "utf-8")
+    file = open(nome_arq, "ab", encoding="utf-8")
     dump(valor, file)
     file.close()
     return None
@@ -252,21 +251,22 @@ def append_b(value, file_name: str) -> None:
 def make_dir(dir_name: str) -> int:
     if dir_name:
         try:
-        	# Creating the directory
+            # Creating the directory
             mkdir(dir_name)
             return 1
         # Case the directory already exists
         except FileExistsError:
-        	return 0
+            return 0
         # Case the path doesnt exists
         except FileNotFoundError:
-        	return 0
+            return 0
     return 0
 
 
 # Tem como parâmetro uma string (nome do usuário, e tarefa
 # do tipo tarefa
 # Cadastra uma nova tarefa no usuário passado como argumento
+
 def register_task(task: Task, user_name: str) -> bool:
     caminho_padrao = getcwd()
     caminho_arq_binario = getcwd() + sep + NAME_DIR_TASKS + sep + nome_usuario + sep

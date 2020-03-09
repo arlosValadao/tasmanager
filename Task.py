@@ -1,8 +1,9 @@
 class Task:
-    def __init__(self, title: str, description: str, priority: int):
+    def __init__(self, id: int, title: str, description: str, priority: int):
         self.__title: str = title
         self.__description: str = description
         self.__priority: int = priority
+        self.__id = id
 
 
     def get_title(self):
@@ -12,6 +13,12 @@ class Task:
         if type(description) == "<class 'str'>":
             self.__title = title
         return -1
+
+    def get_id(self):
+        return self.__id
+
+    def set_id(self, id: int):
+        self.__id = id
 
     def get_description(self):
         return self.__description
