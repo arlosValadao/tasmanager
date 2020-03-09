@@ -10,11 +10,6 @@ from User import *
 sep is the char that the operating system use for to differentiate directories of files
 '''
 
-# Dir name that will to store the tasks of all users
-NAME_DIR_TASKS = "tarefas"
-# Path of file (script) funcoes
-PATH_SCRIPT = getcwd()
-
 
 # Has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
@@ -106,12 +101,12 @@ def freeze_screen() -> None:
 # and the file name to be manipulated
 # Authenticates the user on the system
 # Returns True, case the user was authenticated and False, otherwise
-def autenticate_user(login: str, passwd: str, file_name: str) -> bool:
+def autenticate_user(login: str, password: str, file_name: str) -> bool:
     with open(file_name, encoding="utf-8") as file:
         for line in file:
-            linha = line[:-1].split(' ')
+            line = line[:-1].split(' ')
             # Verifying login and passwd
-            if login == line[0] and line[1] == encrypt(passwd):
+            if login == line[0] and line[1] == encrypt(password):
                 return True
         # Case the login and passwd entered are not correct
         return False
@@ -134,12 +129,13 @@ def file_exists(file_name: str, path: str) -> bool:
     return False
 '''
 
+
 #Sera usado em todas as opcoes quando o usuario faz o login e apos ele fazer o login
-# Has 2 string as parameter, name of directory that storage all the tasks of system,
-# and the path root of script
+# Has 3 string as parameter, name of directory that storage all the tasks of system,
+# the path root of script and the name of user logged
 # The function verifies and creates (if necessary) all files necessary
 # for the correct functionament of system, post login
-def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str):
+def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str) -> None:
     # Verifying existence of directory that storage the tasks of sysem
     make_dir(NAME_TASKS_DIR)
     # Verifying existence of directory that storage the tasks of user registered
@@ -150,9 +146,11 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str):
     chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + login)
     # Verifying existence of binary file that storage tasks and id of tasks of user registered
     create_file(login + "_tasks.pbl", 1)
-    create_file(login + "_id.pbl", 1)
+    # File that storage the value of tasks id of user
+    create_file(login + "_info.pbl", 1)
     # Back to root path of script
     chdir(SCRIPT_ROOT_PATH)
+    return None
 
 
 # Has a string (file name), an integer (type of file)
@@ -165,6 +163,8 @@ def create_file(file_name: str, file_type: int) -> int:
         # Conditional assignment
         file = open(file_name, 'x') if file_type == 0 else open(file_name, 'xb')
         file.close()
+        if file_type != 0:
+            write_b(0, file_name)
         return 1
     except FileExistsError:
         return 0
@@ -175,29 +175,12 @@ def create_file(file_name: str, file_type: int) -> int:
 # Cadastra um usuário no sistema, melhor dizendo, insere
 # o nome e senha do usuário no arquivo em modo de texto que
 # guarda todos os usuários do sistema
-def register_user(user: User, file_name: str) -> bool:
-    # Gravando o nome e o hash da senha do usuário no arquivo "nome_arq"
-    with open(nome_arq, 'a', encoding='utf-8') as arquivo:
-        arquivo.write(usuario.get_nome() + " " + encrypt(usuario.get_senha()) + '\n')
-    # Criando o diretório com o nome do usuário e que irá guardar suas tarefas
-    criar_diretorio(usuario.get_nome(), PATH_SCRIPT + sep + NAME_DIR_TASKS)
-    # Caminho onde o arquivo binário será criado
-    caminho_arq_binario = PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome() + sep
-    # Mudando para o diretório onde será criado os arquivos binários
-    chdir(caminho_arq_binario)
-    # Criando o arquivo em modo binário que guarda as tarefas do usuário
-    criar_arquivo(usuario.get_nome() + "_tarefas.pbl", 1)
-    # Criando o arquivo em modo binário que guarda a ultima ocorrência do ID da tarefa
-    criar_arquivo(usuario.get_nome() + ".i", 1)
-    # Adicionando o valor do id no arquivo do usuario
-    append_b(0, usuario.get_nome() + ".i")
-    # Mudando para o caminho do script
-    chdir(PATH_SCRIPT)
-    # Mudando para o diretório onde se encontra o arquivo binário ".i"
-    chdir(PATH_SCRIPT + sep + NAME_DIR_TASKS + sep + usuario.get_nome())
-    # Voltando para o diretório do script
-    chdir(PATH_SCRIPT)
-    return True
+def register_user(user: User, file_name: str) -> None:
+    # Inserting the nickname and hash of user on file that storage
+    # all users of system
+    with open(file_name, 'a', encoding='utf-8') as file:
+        file.write(user.get_nome() + " " + encrypt(user.get_password()) + '\n')
+    return None
 
 
 # Has two strings as parameter, the first is a login and the 
@@ -219,17 +202,17 @@ def login_exists(login: str, file_name: str) -> bool:
 # Read a binary file
 # Returns a tuple containing all lines of the file,
 # each line is an item of tuple
-def read_b(file_name: str) -> tuple:
+def read_b(file_name: str) -> list:
     file_lines = []
     # Abrindo o arquivo para leitura
-    file = open(file_name, "rb", encoding="utf-8")
+    file = open(file_name, "rb", encoding = "utf-8")
     while True:
         try:
             file_lines.append(load(file))
         # End Of File
         except EOFError:
             file.close()
-            return tuple(file_lines)
+            return file_lines
 
 
 # Has an string (name of file), and another variable as parameter 
@@ -237,8 +220,18 @@ def read_b(file_name: str) -> tuple:
 # Append a value in a file binary mode
 # Returns None
 def append_b(value, file_name: str) -> None:
-    file = open(nome_arq, "ab", encoding="utf-8")
+    file = open(nome_arq, "ab", encoding = "utf-8")
     dump(valor, file)
+    file.close()
+    return None
+
+
+# Has a string and a value as parameter
+# Writes the value in file (file_name)
+# Returns None
+def write_b(value, file_name: str) -> None:
+    file = open(file_name, "wb", encoding = "utf-8")
+    dump(value, file)
     file.close()
     return None
 
@@ -261,18 +254,3 @@ def make_dir(dir_name: str) -> int:
         except FileNotFoundError:
             return 0
     return 0
-
-
-# Tem como parâmetro uma string (nome do usuário, e tarefa
-# do tipo tarefa
-# Cadastra uma nova tarefa no usuário passado como argumento
-
-def register_task(task: Task, user_name: str) -> bool:
-    caminho_padrao = getcwd()
-    caminho_arq_binario = getcwd() + sep + NAME_DIR_TASKS + sep + nome_usuario + sep
-    # Mudando para o diretório onde se encontra o arquivo do usuário
-    chdir(caminho_arq_binario)
-    append_b(1, nome_usuario + '_tarefas.pbl')
-    # Voltando para o diretório onde o script está
-    chdir(caminho_padrao)
-    return True
