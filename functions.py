@@ -5,6 +5,7 @@ from pickle import dump, load
 from time import sleep
 from Task import *
 from User import *
+from prettytable import PrettyTable
 
 '''
 sep is the char that the operating system use for to differentiate directories of files
@@ -135,7 +136,7 @@ def file_exists(file_name: str, path: str) -> bool:
 # the path root of script and the name of user logged
 # The function verifies and creates (if necessary) all files necessary
 # for the correct functionament of system, post login
-def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str) -> None:
+def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str, password: str) -> None:
     # Verifying existence of directory that storage the tasks of sysem
     make_dir(NAME_TASKS_DIR)
     # Verifying existence of directory that storage the tasks of user registered
@@ -147,7 +148,9 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
     # Verifying existence of binary file that storage tasks and id of tasks of user registered
     create_file(login + "_tasks.pbl", 1)
     # File that storage the value of tasks id of user
-    create_file(login + "_info.pbl", 1)
+    if create_file(login + "_info.pbl", 1):
+    	append_b(0, login + "_info.pbl")
+    	append_b(User(login, password), login + "_info.pbl")
     # Back to root path of script
     chdir(SCRIPT_ROOT_PATH)
     return None
@@ -163,8 +166,6 @@ def create_file(file_name: str, file_type: int) -> int:
         # Conditional assignment
         file = open(file_name, 'x') if file_type == 0 else open(file_name, 'xb')
         file.close()
-        if file_type != 0:
-            write_b(0, file_name)
         return 1
     except FileExistsError:
         return 0
@@ -254,3 +255,22 @@ def make_dir(dir_name: str) -> int:
         except FileNotFoundError:
             return 0
     return 0
+
+
+# Has a list as parameter (list of tasks)
+# Convert Task objects to lists and adds all
+# in a table (of PrettyTable module).
+# Show the tasks of user in table format
+def show_tasks(task_list: list) -> None:
+	table = PrettyTable()
+	table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE" ]
+	# Converting the task to lists and adding the list in table (rows)
+	for task in task_list:
+		task_converted_2_list = []
+		task_converted_2_list.append(task.get_id())
+		task_converted_2_list.append(task.get_title())
+		task_converted_2_list.append(task.get_description())
+		task_converted_2_list.append(task.get_priority())
+		table.add_row(task_converted_2_list)
+	print(table)
+	return None
