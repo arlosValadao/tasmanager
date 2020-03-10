@@ -131,12 +131,12 @@ def file_exists(file_name: str, path: str) -> bool:
 '''
 
 
-#Sera usado em todas as opcoes quando o usuario faz o login e apos ele fazer o login
+# Sera usado em todas as opcoes quando o usuario faz o login e apos ele fazer o login
 # Has 3 string as parameter, name of directory that storage all the tasks of system,
 # the path root of script and the name of user logged
 # The function verifies and creates (if necessary) all files necessary
 # for the correct functionament of system, post login
-def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str, password: str) -> None:
+def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str) -> None:
     # Verifying existence of directory that storage the tasks of sysem
     make_dir(NAME_TASKS_DIR)
     # Verifying existence of directory that storage the tasks of user registered
@@ -149,8 +149,8 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
     create_file(login + "_tasks.pbl", 1)
     # File that storage the value of tasks id of user
     if create_file(login + "_info.pbl", 1):
-    	append_b(0, login + "_info.pbl")
-    	append_b(User(login, password), login + "_info.pbl")
+        append_b(0, login + "_info.pbl")
+        append_b([], login + "_info.pbl")
     # Back to root path of script
     chdir(SCRIPT_ROOT_PATH)
     return None
@@ -168,6 +168,7 @@ def create_file(file_name: str, file_type: int) -> int:
         file.close()
         return 1
     except FileExistsError:
+        print("Passei por except")
         return 0
 
 
@@ -206,7 +207,7 @@ def login_exists(login: str, file_name: str) -> bool:
 def read_b(file_name: str) -> list:
     file_lines = []
     # Abrindo o arquivo para leitura
-    file = open(file_name, "rb", encoding = "utf-8")
+    file = open(file_name, "rb", encoding="utf-8")
     while True:
         try:
             file_lines.append(load(file))
@@ -221,7 +222,7 @@ def read_b(file_name: str) -> list:
 # Append a value in a file binary mode
 # Returns None
 def append_b(value, file_name: str) -> None:
-    file = open(nome_arq, "ab", encoding = "utf-8")
+    file = open(nome_arq, "ab", encoding="utf-8")
     dump(valor, file)
     file.close()
     return None
@@ -231,7 +232,7 @@ def append_b(value, file_name: str) -> None:
 # Writes the value in file (file_name)
 # Returns None
 def write_b(value, file_name: str) -> None:
-    file = open(file_name, "wb", encoding = "utf-8")
+    file = open(file_name, "wb", encoding="utf-8")
     dump(value, file)
     file.close()
     return None
@@ -262,15 +263,15 @@ def make_dir(dir_name: str) -> int:
 # in a table (of PrettyTable module).
 # Show the tasks of user in table format
 def show_tasks(task_list: list) -> None:
-	table = PrettyTable()
-	table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE" ]
-	# Converting the task to lists and adding the list in table (rows)
-	for task in task_list:
-		task_converted_2_list = []
-		task_converted_2_list.append(task.get_id())
-		task_converted_2_list.append(task.get_title())
-		task_converted_2_list.append(task.get_description())
-		task_converted_2_list.append(task.get_priority())
-		table.add_row(task_converted_2_list)
-	print(table)
-	return None
+    table = PrettyTable()
+    table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE"]
+    # Converting the task to lists and adding the list in table (rows)
+    for task in task_list:
+        task_converted_2_list = []
+        task_converted_2_list.append(task.get_id())
+        task_converted_2_list.append(task.get_title())
+        task_converted_2_list.append(task.get_description())
+        task_converted_2_list.append(task.get_priority())
+        table.add_row(task_converted_2_list)
+    print(table)
+    return None

@@ -63,10 +63,11 @@ while selected_option != 3:
                 print("\033[1;31mLogin realizado com sucesso! \033[m")
                 verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH)
                 # Object of user logged in system, at some point he was dead in file users.txt
-                resurrected_user = User(login, senha)
-                while 5 != selected_option_sub:
+                resurrected_user = User(login, password)
+                sub_menu_option_selected = sub_menu()
+                while 5 != sub_menu_option_selected:
                     # Case the user want create a new task
-                    if selected_option_sub == 1:
+                    if sub_menu_option_selected == 1:
                         task_titule = input("\033[1mTitulo da tarefa: \033[m")
                         task_description = input("\033[1mDescricao da tarefa: \033[m")
                         task_priority = menu_priority_task()
