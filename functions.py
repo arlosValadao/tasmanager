@@ -84,9 +84,10 @@ def sub_menu() -> int:
 # ex: (def main_menu() -> read_int)
 def menu_priority_task() -> int:
     print("\033[1m  PRIORIDADE DA TAREFA\033[m")
-    print("[ 1 ] - Prioridade Baixa")
-    print("[ 2 ] - Prioridade Media")
-    print("[ 3 ] - Prioridade ALta")
+    print()
+    print("\033[1m[ 1 ] - Prioridade Alta\033[m")
+    print("\033[1m[ 2 ] - Prioridade Media\033[m")
+    print("\033[1m[ 3 ] - Prioridade Baixa\033[m")
     return read_int()
 
 
@@ -144,13 +145,13 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
     make_dir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
     # Changing for the directory that have the name of user registered
     # and storage yours tasks and id of tasks
-    chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + login)
+    chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
     # Verifying existence of binary file that storage tasks and id of tasks of user registered
-    create_file(login + "_tasks.pbl", 1)
+    if create_file(login + "_tasks.pbl", 1):
+        write_b([], login + "_tasks.pbl")
     # File that storage the value of tasks id of user
     if create_file(login + "_info.pbl", 1):
-        append_b(0, login + "_info.pbl")
-        append_b([], login + "_info.pbl")
+        write_b(0, login + "_info.pbl")
     # Back to root path of script
     chdir(SCRIPT_ROOT_PATH)
     return None
@@ -168,20 +169,19 @@ def create_file(file_name: str, file_type: int) -> int:
         file.close()
         return 1
     except FileExistsError:
-        print("Passei por except")
         return 0
 
 
-# Tem como parâmetro um objeto do tipo Usuario e uma string  # Mover isso daqui para o main, deixar a funcao de cadastrar o usuario somente para salvar o login e senha no arquivo
-# o nome do arquivo no qual as informações vão ser gravadas
-# Cadastra um usuário no sistema, melhor dizendo, insere
-# o nome e senha do usuário no arquivo em modo de texto que
-# guarda todos os usuários do sistema
+# Has as parameter a variable user of User data type
+# and a string (name of file that the informations will registered)
+# Register a user to a text file (writes the user's name and password to the file)
+# that storage all users of system
+# Returns None
 def register_user(user: User, file_name: str) -> None:
     # Inserting the nickname and hash of user on file that storage
     # all users of system
     with open(file_name, 'a', encoding='utf-8') as file:
-        file.write(user.get_nome() + " " + encrypt(user.get_password()) + '\n')
+        file.write(user.get_name() + " " + encrypt(user.get_password()) + '\n')
     return None
 
 
@@ -207,7 +207,7 @@ def login_exists(login: str, file_name: str) -> bool:
 def read_b(file_name: str) -> list:
     file_lines = []
     # Abrindo o arquivo para leitura
-    file = open(file_name, "rb", encoding="utf-8")
+    file = open(file_name, "rb")
     while True:
         try:
             file_lines.append(load(file))
@@ -217,22 +217,22 @@ def read_b(file_name: str) -> list:
             return file_lines
 
 
-# Has an string (name of file), and another variable as parameter 
+'''# Has an string (name of file), and another variable as parameter 
 # (value), value can be anything supported for python.
 # Append a value in a file binary mode
 # Returns None
 def append_b(value, file_name: str) -> None:
-    file = open(nome_arq, "ab", encoding="utf-8")
-    dump(valor, file)
+    file = open(file_name, "ab")
+    dump(value, file)
     file.close()
     return None
-
+'''
 
 # Has a string and a value as parameter
 # Writes the value in file (file_name)
 # Returns None
 def write_b(value, file_name: str) -> None:
-    file = open(file_name, "wb", encoding="utf-8")
+    file = open(file_name, "wb")
     dump(value, file)
     file.close()
     return None
@@ -273,5 +273,6 @@ def show_tasks(task_list: list) -> None:
         task_converted_2_list.append(task.get_description())
         task_converted_2_list.append(task.get_priority())
         table.add_row(task_converted_2_list)
+    cls()
     print(table)
     return None

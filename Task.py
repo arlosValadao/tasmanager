@@ -10,7 +10,7 @@ class Task:
         return self.__title
 
     def set_title(self, title: str):
-        if type(description) == "<class 'str'>":
+        if type(title) == "<class 'str'>":
             self.__title = title
         return -1
 
