@@ -2,10 +2,10 @@ from Task import *
 
 
 class User:
-    def __init__(self, name: str, password: str):
+    def __init__(self, name: str, password: str, tasks: list = []):
         self.__name: str = name
         self.__password: str = password
-        self.__tasks: list = []
+        self.__tasks: list = tasks
 
     def get_name(self):
         return self.__name

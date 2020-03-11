@@ -98,7 +98,12 @@ while selected_option != 3:
                     elif sub_menu_option_selected == 4:
                         show_tasks(resurrected_user.get_tasks())
                         remove_id = input("Qual tarefa você deseja remover?")
-                        remove_task(resurrected_user.get_tasks())
+                        if not remove_task(resurrected_user.get_tasks(), removed_id):
+                            # Talvez criar uma função chamada aviso, ela ira receber uma string e imprimira essa string
+                            # na tela, com a string formatada em negrito e colorida em vermelho.
+                            print()
+                            print("\t\t\033[1;31mNão existe tarefa com esse id! \033[m")
+                            freeze_screen()
                     sub_menu_option_selected = sub_menu()
 
 

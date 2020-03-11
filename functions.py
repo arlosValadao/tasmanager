@@ -15,9 +15,9 @@ sep is the char that the operating system use for to differentiate directories o
 # Has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
 # Returns a hash SHA512 of string (senha) in hexadecimal format
-def encrypt(passwd: str) -> str:
+def encrypt(password: str) -> str:
     digest = sha512()
-    digest.update(passwd.encode('utf-8'))
+    digest.update(password.encode('utf-8'))
     return digest.hexdigest()
 
 
@@ -216,6 +216,13 @@ def read_b(file_name: str) -> list:
             file.close()
             return file_lines
 
+# Has a string as parameter
+# Displays the message in bold and
+# colored red on the screen
+# Returns None
+def alert(message: str) -> None:
+    print("\033[1;31m {} \033[m".format(message))
+    return None
 
 '''# Has an string (name of file), and another variable as parameter 
 # (value), value can be anything supported for python.
@@ -227,6 +234,7 @@ def append_b(value, file_name: str) -> None:
     file.close()
     return None
 '''
+
 
 # Has a string and a value as parameter
 # Writes the value in file (file_name)
@@ -278,15 +286,38 @@ def show_tasks(task_list: list) -> None:
     return None
 
 
-# Has an list (task list of user) and a index (index to be removed)
-# as parameter
-# The function removes an tasks of user list of tasks
-# Returns 1 when all is successful and -1 when the index
-# is bigger than len of task list
-def remove_task(task_list: list, index: int) -> int:
-    if index <= len(task_list):
-        task_list.__delitem__(index)
-        return 1
-    else: # Implementar um algoritmo de busca binária e fazer ele retornar o indice da Tarefa que corresponde ao id procurado
-        # E retornar -1 caso não encontre a Tarefa com id especificado \n
-        return -1
+# Has as parameter a list (list of tasks) and a id
+# The function search the task with entered id
+# Returns the task position on task list,
+#otherwise returns -1
+def search_task(task_list: list, id: int) -> int:
+    # Binary search algorithm
+    while start <= fim:
+        mid = len(task_list) // 2
+        fim = len(task_list) - 1
+        start = 0
+        if task_list[mid].get_id() == id:
+            return mid
+        elif id > task_list[mid].get_id():
+            start = mid + 1
+        else:
+            fim = mid - 1
+    return -1
+
+
+# Has a task list (list task of user) and an id (int)
+# The function remove the task with id entered
+# of task list
+# Returns True if remove operations was successful
+# and False otherwise
+def remove_task(task_list: list, id: int) -> bool:
+    task_searched = search_task(task_list, id)
+    if task_searched > -1:
+        task_list.__del__item(task_searched)
+        return True
+    return False
+
+
+# The function edit a item of task
+def edit_task(task_list: list, id: int):
+    print()
