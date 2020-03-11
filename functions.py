@@ -288,5 +288,5 @@ def remove_task(task_list: list, index: int) -> int:
         task_list.__delitem__(index)
         return 1
     else: # Implementar um algoritmo de busca binária e fazer ele retornar o indice da Tarefa que corresponde ao id procurado
-        # E retornar -1 caso não encontre a Tarefa com id especificado
+        # E retornar -1 caso não encontre a Tarefa com id especificado \n
         return -1
