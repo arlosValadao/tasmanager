@@ -276,3 +276,17 @@ def show_tasks(task_list: list) -> None:
     cls()
     print(table)
     return None
+
+
+# Has an list (task list of user) and a index (index to be removed)
+# as parameter
+# The function removes an tasks of user list of tasks
+# Returns 1 when all is successful and -1 when the index
+# is bigger than len of task list
+def remove_task(task_list: list, index: int) -> int:
+    if index <= len(task_list):
+        task_list.__delitem__(index)
+        return 1
+    else: # Implementar um algoritmo de busca binária e fazer ele retornar o indice da Tarefa que corresponde ao id procurado
+        # E retornar -1 caso não encontre a Tarefa com id especificado
+        return -1

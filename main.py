@@ -73,7 +73,7 @@ while selected_option != 3:
                 resurrected_user.set_tasks(user_tasks)
                 sub_menu_option_selected = sub_menu()
                 while 5 != sub_menu_option_selected:
-                    # Case the user want create a new task
+                    # Case the user wants create a new task
                     if sub_menu_option_selected == 1:
                         task_titule = input("\033[1mTitulo da tarefa: \033[m")
                         task_description = input("\033[1mDescricao da tarefa: \033[m")
@@ -88,13 +88,17 @@ while selected_option != 3:
                         resurrected_user.set_task(new_task)
                         write_b(resurrected_user.get_tasks(), user_file_path + login + "_tasks.pbl")
                         write_b(task_id, user_file_path + login + "_info.pbl")
-                    # Case the user want change a task
+                    # If the user wants to change a task
                     elif sub_menu_option_selected == 2:
                         show_tasks(resurrected_user.get_tasks())
                         print()
                         input("\t\t \033[1;31m </ENTER> TO CONTINUE \033[m")
 
-
+                    # If the user wants to remove a task
+                    elif sub_menu_option_selected == 4:
+                        show_tasks(resurrected_user.get_tasks())
+                        remove_id = input("Qual tarefa você deseja remover?")
+                        remove_task(resurrected_user.get_tasks())
                     sub_menu_option_selected = sub_menu()
 
 
