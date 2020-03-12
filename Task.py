@@ -6,32 +6,28 @@ class Task:
         self.__id = id
 
 
-    def get_title(self):
+    def get_title(self) -> str:
         return self.__title
 
-    def set_title(self, title: str):
-        if type(title) == "<class 'str'>":
-            self.__title = title
-        return -1
+    def set_title(self, title: str) -> None:
+        self.__title = title
+        return
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self.__id
 
-    def set_id(self, id: int):
-        self.__id = id
-
-    def get_description(self):
+    def get_description(self) -> str:
         return self.__description
 
-    def set_description(self, description: str):
-        if type(description) == "<class 'str'>":
-            self.__description = description
-        return -1
+    def set_description(self, description: str) -> None:
+        self.__description = description
+        return
 
-    def get_priority(self):
+    def get_priority(self) -> int:
         return self.__priority
 
-    def set_priority(self, priority: int):
+    def set_priority(self, priority: int) -> int:
         if 4 > priority > 0:
             self.__priority = priority
-        return -1
+            return 1
+        return 0

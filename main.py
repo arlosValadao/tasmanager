@@ -1,7 +1,6 @@
 from functions import *
 from User import *
 from Task import *
-from getpass import getpass
 from os import getcwd, sep
 '''
 getpass faz a animação de não ecoar na tela os caracteres que são digitados pelo usuário, ela é implementada
@@ -16,9 +15,10 @@ NAME_USERS_FILE = "users.txt"
 NAME_TASKS_DIR = "tasks"
 
 
-selected_option = 0
+selected_option = 6
 while selected_option != 3:
-    selected_option = main_menu()
+    while 0 > selected_option or selected_option > 4:
+        selected_option = main_menu()
     # Case the user wants register a new user in the system
     if selected_option == 1:
         while True:
@@ -30,24 +30,24 @@ while selected_option != 3:
                 create_file(NAME_USERS_FILE, 0)
                 # Verifying existence of typed nickname on system
                 if login_exists(nick, NAME_USERS_FILE):
-                    print("\033[1;31mO nick informado já está cadastrado no sistema \033[1m")
-                    print("\033[1;31mPor favor, tente outro nick \033[m")
+                    alert("O nick informado já está cadastrado no sistema")
+                    alert("Por favor, tente outro nick")
                     freeze_screen()
                 else:
                     password = input("\033[1mEntre com a sua senha: \033[m")
                     break
             # Case invalid nickname
             else:
-                print("\033[1;31mNick inválido \033[m")
-                print("\033[1;31mO seu nick deve ser composto somente por caracteres alfanumericos e underline \033[m")
+                alert("Nick inválido")
+                alert("O seu nick deve ser composto somente por caracteres alfanumericos e underline")
                 freeze_screen()
         # User informations collected with successful
-        print("\033[1;31mCadastrando...\033[m")
+        print("Cadastrando...")
         # Making an object User
         new_user = User(nick, password)
         # Registering the user on system
         register_user(new_user, NAME_USERS_FILE)
-        print("\033[1;31mUsuario cadastrado com sucesso!\033[m")
+        alert("Usuario cadastrado com sucesso!")
         freeze_screen()
 
     # Case the user want log in the system
@@ -55,68 +55,104 @@ while selected_option != 3:
         while True:
             login = input("\033[1mDigite o seu login: \033[m")
             password = input("\033[1mDigite a sua senha: \033[m")
-            print("\033[1;31mLogando no sistema... \033[m")
+            alert("Logando no sistema...")
             # Verifying existence of file that storage users of system
             create_file(NAME_USERS_FILE, 0)
             # Authenticating the user in the system
             if autenticate_user(login, password, NAME_USERS_FILE):
                 freeze_screen()
-                print("\033[1;31mLogin realizado com sucesso! \033[m")
+                alert("Login realizado com sucesso!")
                 verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                # Path of files of user logged
-                user_file_path = getcwd() + sep + NAME_TASKS_DIR + sep + login + sep
+                # User task file path
+                USER_TASK_FILE_PATH = SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_tasks.pbl"
+                # User info file path
+                USER_INFO_FILE_PATH = SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl"
                 # Object of user logged in system, at some point he was dead in file users.txt
                 resurrected_user = User(login, password)
                 # Getting tasks from the logged user file
-                user_tasks = read_b(user_file_path + login + "_tasks.pbl")
+                user_tasks = read_b(USER_TASK_FILE_PATH)
                 user_tasks = user_tasks[0]
                 resurrected_user.set_tasks(user_tasks)
                 sub_menu_option_selected = sub_menu()
                 while 5 != sub_menu_option_selected:
-                    # Case the user wants create a new task
+
+
+                    # If the user wants create a new task
                     if sub_menu_option_selected == 1:
-                        task_titule = input("\033[1mTitulo da tarefa: \033[m")
+                        task_title = input("\033[1mTitulo da tarefa: \033[m")
                         task_description = input("\033[1mDescricao da tarefa: \033[m")
                         task_priority = menu_priority_task()
                         # Getting the id of task
-                        task_id = read_b(user_file_path + login + "_info.pbl")
+                        task_id = read_b(USER_INFO_FILE_PATH)
                         task_id = task_id[0]
                         task_id += 1
                         # Making a Task object
-                        new_task = Task(task_id, task_titule, task_description, task_priority)
+                        new_task = Task(task_id, task_title, task_description, task_priority)
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         resurrected_user.set_task(new_task)
-                        write_b(resurrected_user.get_tasks(), user_file_path + login + "_tasks.pbl")
-                        write_b(task_id, user_file_path + login + "_info.pbl")
-                    # If the user wants to change a task
+                        write_b(resurrected_user.get_tasks(), USER_TASK_FILE_PATH)
+                        write_b(task_id, USER_INFO_FILE_PATH)
+                        alert("Tarefa criada com sucesso!")
+
+                    # If the user wants to show a task
                     elif sub_menu_option_selected == 2:
-                        show_tasks(resurrected_user.get_tasks())
+                        cls()
+                        resurrected_user.show_tasks()
                         print()
-                        input("\t\t \033[1;31m </ENTER> TO CONTINUE \033[m")
+                        alert("\t\t </ENTER> TO CONTINUE")
+                        input()
+
+
+                    # If the user wants to edit a task
+                    elif sub_menu_option_selected == 3:
+                        resurrected_user.show_tasks()
+                        alert("Qual o ID da tarefa você deseja alterar?")
+                        task_searched = read_int()
+                        if resurrected_user.find_task(task_searched) > -1:
+                            task_index_searched = resurrected_user.find_task(task_searched)
+                            item = task_change_menu()
+                            if item == 1:
+                                modify_item = input("> ")
+                                resurrected_user.get_tasks()[task_index_searched].set_title(modify_item)
+                            elif item == 2:
+                                modify_item = input("> ")
+                                resurrected_user.get_tasks()[task_index_searched].set_description(modify_item)
+                            elif item == 3:
+                                modify_item = task_change_menu()
+                                resurrected_user.get_tasks()[task_index_searched].set_priority(modify_item)
+                            verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
+                            # Updating the user task file of user
+                            write_b(resurrected_user.get_tasks(), USER_TASK_FILE_PATH)
+                        else:
+                            alert("Não existe nenhuma tarefa com o ID informado")
+                            alert("Por favor, tente novamente")
+                            freeze_screen()
 
                     # If the user wants to remove a task
                     elif sub_menu_option_selected == 4:
-                        show_tasks(resurrected_user.get_tasks())
-                        remove_id = input("Qual tarefa você deseja remover?")
-                        if not remove_task(resurrected_user.get_tasks(), removed_id):
-                            # Talvez criar uma função chamada aviso, ela ira receber uma string e imprimira essa string
-                            # na tela, com a string formatada em negrito e colorida em vermelho.
+                        resurrected_user.show_tasks()
+                        alert("Qual o ID da tarefa você deseja remover?")
+                        remove_id = read_int()
+                        if not resurrected_user.remove_task(remove_id):
                             print()
-                            print("\t\t\033[1;31mNão existe tarefa com esse id! \033[m")
+                            alert("\t\tNão existe nenhuma tarefa com esse id!")
                             freeze_screen()
+                        verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
+                        # Updating the user task file of user
+                        write_b(resurrected_user.get_tasks(), USER_TASK_FILE_PATH)
+                        alert("Tarefa removida com sucesso!")
+                        freeze_screen()
+
                     sub_menu_option_selected = sub_menu()
-
-
-                    # Case the user want see your tasks
-                # Case the user logout of account
-                print("\033[1mDeslogando da conta... \033[m")
-                print('\033[1mAguarde... \033[m')
+                #  If the user logout of account
+                alert("Deslogando da conta... \033[m")
+                alert("1mAguarde...")
                 freeze_screen()
                 break
             # Case login and/or password entered are incorrect
             else:
-                print("\033[1;31mLogin e/ou senha incorretos! \033[m")
+                alert("Login e/ou senha incorretos!")
 # Exiting of system
-print("\033[1mSaindo do programa... \033[1m")
+alert("Saindo do programa...")
 freeze_screen()
 

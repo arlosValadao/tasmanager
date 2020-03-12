@@ -1,11 +1,9 @@
 from hashlib import sha512
-from os import getcwd, chdir, system, name, mkdir
-from os import path, sep, listdir
+from os import chdir, system, name, mkdir
+from os import sep
 from pickle import dump, load
 from time import sleep
-from Task import *
 from User import *
-from prettytable import PrettyTable
 
 '''
 sep is the char that the operating system use for to differentiate directories of files
@@ -49,7 +47,6 @@ def read_int() -> int:
 # uses a function as return indicator
 # ex: (def main_menu() -> read_int)
 def main_menu() -> int:
-    cls()
     print('_' * 33)
     print()
     print("|     GERENCIADOR DE TAREFAS    |")
@@ -58,6 +55,20 @@ def main_menu() -> int:
     print("[ 1 ] - Cadastrar novo usuario")
     print('[ 2 ] - Logar no sistema')
     print("[ 3 ] - Sair do sistema")
+    return read_int()
+
+
+# Show the options available for the
+# changes of tasks
+# Returns read_int function
+# i set the return as int because i can't
+# uses a function as return indicator
+# ex: (def main_menu() -> read_int)
+def task_change_menu():
+    cls()
+    print("\033[1m[ 1 ] - Alterar titulo\033[m")
+    print("\033[1m[ 2 ] - Alterar descricao\033[m")
+    print("\033[1m[ 3 ] - Alterar prioridade\033[m")
     return read_int()
 
 
@@ -113,26 +124,7 @@ def autenticate_user(login: str, password: str, file_name: str) -> bool:
         # Case the login and passwd entered are not correct
         return False
 
-        # A funcao vai ir ate onde foi solicitada e voltar para onde foi chamada, sem esse negocio de caminho do arquivo
 
-
-'''# Has two parameters, 2 strings, the name of file and the path of file.
-# Verifies if the file exists, trough of file name
-# Returns True case the file exists and False otherwise
-def file_exists(file_name: str, path: str) -> bool:
-    # Directory that the function was called
-    source_path = getcwd()
-    chdir(path)
-    # Verifying if the file exists
-    if path.exists(file_name):
-        chdir(source_path)
-        return True
-    chdir(source_path)
-    return False
-'''
-
-
-# Sera usado em todas as opcoes quando o usuario faz o login e apos ele fazer o login
 # Has 3 string as parameter, name of directory that storage all the tasks of system,
 # the path root of script and the name of user logged
 # The function verifies and creates (if necessary) all files necessary
@@ -216,24 +208,14 @@ def read_b(file_name: str) -> list:
             file.close()
             return file_lines
 
+
 # Has a string as parameter
 # Displays the message in bold and
 # colored red on the screen
 # Returns None
 def alert(message: str) -> None:
-    print("\033[1;31m {} \033[m".format(message))
+    print("\033[1;31m{}\033[m".format(message))
     return None
-
-'''# Has an string (name of file), and another variable as parameter 
-# (value), value can be anything supported for python.
-# Append a value in a file binary mode
-# Returns None
-def append_b(value, file_name: str) -> None:
-    file = open(file_name, "ab")
-    dump(value, file)
-    file.close()
-    return None
-'''
 
 
 # Has a string and a value as parameter
@@ -264,60 +246,3 @@ def make_dir(dir_name: str) -> int:
         except FileNotFoundError:
             return 0
     return 0
-
-
-# Has a list as parameter (list of tasks)
-# Convert Task objects to lists and adds all
-# in a table (of PrettyTable module).
-# Show the tasks of user in table format
-def show_tasks(task_list: list) -> None:
-    table = PrettyTable()
-    table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE"]
-    # Converting the task to lists and adding the list in table (rows)
-    for task in task_list:
-        task_converted_2_list = []
-        task_converted_2_list.append(task.get_id())
-        task_converted_2_list.append(task.get_title())
-        task_converted_2_list.append(task.get_description())
-        task_converted_2_list.append(task.get_priority())
-        table.add_row(task_converted_2_list)
-    cls()
-    print(table)
-    return None
-
-
-# Has as parameter a list (list of tasks) and a id
-# The function search the task with entered id
-# Returns the task position on task list,
-#otherwise returns -1
-def search_task(task_list: list, id: int) -> int:
-    # Binary search algorithm
-    while start <= fim:
-        mid = len(task_list) // 2
-        fim = len(task_list) - 1
-        start = 0
-        if task_list[mid].get_id() == id:
-            return mid
-        elif id > task_list[mid].get_id():
-            start = mid + 1
-        else:
-            fim = mid - 1
-    return -1
-
-
-# Has a task list (list task of user) and an id (int)
-# The function remove the task with id entered
-# of task list
-# Returns True if remove operations was successful
-# and False otherwise
-def remove_task(task_list: list, id: int) -> bool:
-    task_searched = search_task(task_list, id)
-    if task_searched > -1:
-        task_list.__del__item(task_searched)
-        return True
-    return False
-
-
-# The function edit a item of task
-def edit_task(task_list: list, id: int):
-    print()
