@@ -24,7 +24,7 @@ def encrypt(password: str) -> str:
 # Returns None
 def cls() -> None:
     system('cls' if name == 'nt' else 'clear')
-    return None
+    return
 
 
 # It doesn't have parameter
@@ -115,7 +115,7 @@ def menu_priority_task() -> int:
 # Returns None
 def freeze_screen() -> None:
     sleep(4.2)
-    return None
+    return
 
 
 # It has 3 parameters, 3 strings, login (name of user)
@@ -155,7 +155,7 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
         write_b(0, login + "_info.pbl")
     # Backs to root path of script
     chdir(SCRIPT_ROOT_PATH)
-    return None
+    return
 
 
 # It has a string, file name, filename that will be created
@@ -184,7 +184,7 @@ def register_user(user: User, file_name: str) -> None:
     # all users of system
     with open(file_name, 'a', encoding='utf-8') as file:
         file.write(user.get_name() + " " + encrypt(user.get_password()) + '\n')
-    return None
+    return
 
 
 # It has 2 strings as parameter, the first is a login (username)and the
@@ -223,7 +223,7 @@ def read_b(file_name: str) -> object:
 # Returns None
 def alert(message: str) -> None:
     print("\033[1;31m{}\033[m".format(message))
-    return None
+    return
 
 
 # It has a string and a value (can be anything) as parameter
@@ -233,7 +233,7 @@ def write_b(value, file_name: str) -> None:
     file = open(file_name, "wb")
     dump(value, file)
     file.close()
-    return None
+    return
 
 
 # It has as parameter a string, the directory or the directory + path

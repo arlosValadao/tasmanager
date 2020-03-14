@@ -5,7 +5,7 @@ from os import getcwd, sep
 
 '''
 /*******************************************************************************
-Autor: Carlos Henrique de Oliveira Valadão
+Autor: UNKNOW
 Componente Curricular: Algoritmos I
 Concluido em: 14/03/2020
 Declaro que este código foi elaborado por mim de forma individual e não contém nenhum
@@ -19,24 +19,24 @@ do código, e estou ciente que estes trechos não serão considerados para fins 
 
 # Root path of script main obviously this can change with each script execution
 SCRIPT_ROOT_PATH = getcwd()
-# Name of file that store the users registered in the system
+# Filename that store registered users in system
 NAME_USERS_FILE = "users.txt"
-# Name of directory that will storage the tasks of users
+# Directory names that storage all users tasks of system
 NAME_TASKS_DIR = "tasks"
 
 
 selected_option = 0
 while selected_option != 3:
-
+    cls()
     selected_option = main_menu()
-    # Case the user wants register a new user in the system
+    # If the user wants register a user on system
     if selected_option == 1:
         while True:
             nick = input("\033[1mEntre com o seu nick: \033[m")
             # Validating the nickname typed
             if nick.strip().isidentifier():
                 nick = nick.strip()
-                # Verifying existence of file that storage users of system
+                # Verifying file existence that storages system users
                 create_file(NAME_USERS_FILE, 0)
                 # Verifying existence of typed nickname on system
                 if login_exists(nick, NAME_USERS_FILE):
@@ -46,29 +46,29 @@ while selected_option != 3:
                 else:
                     password = input("\033[1mEntre com a sua senha: \033[m")
                     break
-            # Case invalid nickname
+            # If invalid nickname
             else:
                 alert("Nick inválido")
                 alert("O seu nick deve ser composto somente por caracteres alfanumericos e underline")
                 freeze_screen()
-        # User informations collected with successful
+        # If user information was successful coleted
         alert("Cadastrando...")
-        # Making an object User
+        # Making User object
         new_user = User(nick, password)
         # Registering the user on system
         register_user(new_user, NAME_USERS_FILE)
         alert("Usuario cadastrado com sucesso!")
         freeze_screen()
 
-    # Case the user want log in the system
+    # If the user want log in system
     elif selected_option == 2:
         while True:
             login = input("\033[1mDigite o seu login: \033[m")
             password = input("\033[1mDigite a sua senha: \033[m")
             alert("Logando no sistema...")
-            # Verifying existence of file that storage users of system
+            # Verifying file existence that storages system users
             create_file(NAME_USERS_FILE, 0)
-            # Authenticating the user in the system
+            # Authenticating  the user in the system
             if autenticate_user(login, password, NAME_USERS_FILE):
                 alert("Login realizado com sucesso!")
                 freeze_screen()
@@ -77,34 +77,39 @@ while selected_option != 3:
                 USER_TASK_FILE_PATH = SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_tasks.pbl"
                 # User info file path
                 USER_INFO_FILE_PATH = SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl"
-                # Object of user logged in system, at some point he was dead in file users.txt
+                # User object logged in system, at some point he was dead in file users.txt
                 resurrected_user = User(login, password)
                 # Getting tasks from the logged user file
                 user_task_list = read_b(USER_TASK_FILE_PATH)
                 resurrected_user.set_tasks(user_task_list)
+                cls()
                 sub_menu_option_selected = sub_menu()
                 while 5 != sub_menu_option_selected:
 
-                    # If the user wants create a new task
+                    # If user wants create a task
                     if sub_menu_option_selected == 1:
                         task_title = input("\033[1mTitulo da tarefa: \033[m")
                         task_description = input("\033[1mDescricao da tarefa: \033[m")
-                        task_priority = menu_priority_task()
+                        while True:
+                            task_priority = menu_priority_task()
+                            if 0 < task_priority < 4:
+                                break
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                        # Getting the id of task
+                        # Getting task id
                         task_id = read_b(USER_INFO_FILE_PATH)
                         task_id += 1
-                        # Making a Task object
+                        # Making Task object
                         new_task = Task(task_id, task_title, task_description, task_priority)
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         resurrected_user.set_task(new_task)
+                        # Updating user task file
                         write_b(resurrected_user.get_tasks(), USER_TASK_FILE_PATH)
                         write_b(task_id, USER_INFO_FILE_PATH)
                         alert("Criando tarefa...")
                         alert("Tarefa criada com sucesso!")
                         freeze_screen()
 
-                    # If the user wants to show a task
+                    # If user wants to see your tasks
                     elif sub_menu_option_selected == 2:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
@@ -115,7 +120,7 @@ while selected_option != 3:
                         alert("\t\t </ENTER> TO CONTINUE")
                         input()
 
-                    # If the user wants to edit a task
+                    # If user wants to edit your tasks
                     elif sub_menu_option_selected == 3:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
@@ -124,7 +129,10 @@ while selected_option != 3:
                             searched_task = read_int()
                             if find_task(user_task_list, searched_task) > -1:
                                 task_index_searched = find_task(user_task_list, searched_task)
-                                item = task_change_menu()
+                                while True:
+                                    item = task_change_menu()
+                                    if 0 < item < 4:
+                                        break
                                 if item == 1:
                                     modify_item = input("> ")
                                     user_task_list[task_index_searched].set_title(modify_item)
@@ -135,7 +143,7 @@ while selected_option != 3:
                                     modify_item = task_change_menu()
                                     user_task_list[task_index_searched].set_priority(modify_item)
                                 verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                                # Updating the user task file of user
+                                # Updating user task file
                                 write_b(user_task_list, USER_TASK_FILE_PATH)
                                 resurrected_user.set_tasks(user_task_list)
                                 alert("Modificando a tarefa...")
@@ -149,7 +157,7 @@ while selected_option != 3:
                             alert("Você ainda não cadastrou tarefas!")
                             freeze_screen()
 
-                    # If the user wants to remove a task
+                    # If user wants to remove a task
                     elif sub_menu_option_selected == 4:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
@@ -158,7 +166,7 @@ while selected_option != 3:
                             remove_id = read_int()
                             if remove_task(user_task_list, remove_id):
                                 verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                                # Updating the user task file of user
+                                # Updating user task file
                                 write_b(user_task_list, USER_TASK_FILE_PATH)
                                 resurrected_user.set_tasks(user_task_list)
                                 alert("Removendo tarefa do sistema...")
@@ -173,16 +181,16 @@ while selected_option != 3:
 
                     cls()
                     sub_menu_option_selected = sub_menu()
-                #  If the user logout of account
+                # If user logout of account
                 alert("Deslogando da conta... \033[m")
                 alert("Aguarde...")
                 freeze_screen()
                 break
-            # Case login and/or password entered are incorrect
+            # If login and/or password incorrect entered
             else:
                 alert("Login e/ou senha incorretos!")
                 freeze_screen()
-# Exiting of system
+# Exiting the system
 alert("Saindo do programa...")
 alert("Aguarde...")
 freeze_screen()
