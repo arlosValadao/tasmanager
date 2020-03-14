@@ -10,7 +10,6 @@ from prettytable import PrettyTable
 sep is the char that the operating system use for to differentiate directories of files
 '''
 
-
 # It has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
 # Returns a hash SHA512 of string (password) in hexadecimal format
@@ -176,7 +175,7 @@ def create_file(file_name: str, file_type: int) -> int:
 
 
 # It has as parameter a user  of User data type
-# and a string (filename that the information will registered), respectively
+# and a string (filename that the information will register), respectively
 # Registers a user to a text file (writes the user's name and password to the file)
 # that storage all users of system
 # Returns None
@@ -187,41 +186,38 @@ def register_user(user: User, file_name: str) -> None:
         file.write(user.get_name() + " " + encrypt(user.get_password()) + '\n')
     return None
 
- # -------------- ok until here ----------------
 
-# Has two strings as parameter, the first is a login and the
-# second is the name of file
+# It has 2 strings as parameter, the first is a login (username)and the
+# second is the filename, file will to be verified login
 # The function verify if the login typed already is
 # inclued in the file
 # Returns True case the file already exists and False otherwise
 def login_exists(login: str, file_name: str) -> bool:
     with open(file_name, encoding="utf-8") as file:
         for line in file:
-            # Converting the line in a list with login and password of user
+            # Line converting in a list with login and password of user
             line = line.split(' ')
             if line[0] == login:
                 return True
         return False
 
 
-# Has a string as parameter, name file
+# It has a string as parameter, filename to  be read
 # Read a binary file
-# Returns a tuple containing all lines of the file,
-# each line is an item of tuple
-def read_b(file_name: str) -> list:
-    file_lines = []
-    # Abrindo o arquivo para leitura
+# Returns "first line of file". Object
+def read_b(file_name: str) -> object:
     file = open(file_name, "rb")
     while True:
         try:
-            file_lines.append(load(file))
-        # End Of File
-        except EOFError:
+            return load(file)
+        except FileNotFoundError:
+            return []
+        finally:
             file.close()
-            return file_lines
 
 
-# Has a string as parameter
+# It has a string as parameter, message
+# to be shown
 # Displays the message in bold and
 # colored red on the screen
 # Returns None
@@ -230,7 +226,7 @@ def alert(message: str) -> None:
     return None
 
 
-# Has a string and a value as parameter
+# It has a string and a value (can be anything) as parameter
 # Writes the value in file (file_name)
 # Returns None
 def write_b(value, file_name: str) -> None:
@@ -240,11 +236,11 @@ def write_b(value, file_name: str) -> None:
     return None
 
 
-# Has as parameter an string, the directory or the directory + path
+# It has as parameter a string, the directory or the directory + path
 # The function make a directory
-# Returns 1 when the file is create successful  and 0
+# Returns 1 when the file is created successful  and 0
 # otherwise, when already exists the file or
-# the path is invalid
+# the name path is invalid
 def make_dir(dir_name: str) -> int:
     if dir_name:
         try:
@@ -260,7 +256,7 @@ def make_dir(dir_name: str) -> int:
     return 0
 
 
-# Has an id (user task id)
+# It has an id (user task id)
 # and a list (task list of user) as a parameter
 # The function search the task with entered id
 # Returns the task position on task list,
@@ -280,8 +276,7 @@ def find_task(task_list: list, id: int) -> int:
     return -1
 
 
-
-# Has an id (int) and a list (task list of user) as parameter
+# It has an id (int) and a list (user task list) as parameter
 # The function remove the task with id entered
 # of task list of user
 # Returns True if remove operations was successful
@@ -294,7 +289,7 @@ def remove_task(task_list: list, id: int) -> bool:
     return False
 
 
-# Have a list (task list of user) as parameter
+# It has a list (user task list) as parameter
 # Convert Task objects to lists and adds all
 # in a table (of PrettyTable module).
 # Show the tasks of user in table format
@@ -308,12 +303,12 @@ def show_tasks(task_list: list) -> bool:
             task_converted_2_list.append(task.get_id())
             task_converted_2_list.append(task.get_title())
             task_converted_2_list.append(task.get_description())
-            #task_converted_2_list.append(task.get_priority())
+            # Task_converted_2_list.append(task.get_priority())
             if task.get_priority() == 1:
                 task_converted_2_list.append("Alta")
             elif task.get_priority() == 2:
                 task_converted_2_list.append("Media")
-            elif task.get_priority() == 3:
+            else:
                 task_converted_2_list.append("Baixa")
             table.add_row(task_converted_2_list)
         print(table)

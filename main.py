@@ -2,10 +2,20 @@
 from User import *
 from Task import *
 from os import getcwd, sep
+
 '''
-getpass faz a animação de não ecoar na tela os caracteres que são digitados pelo usuário, ela é implementada
-no momento que o usuário vai fazer o login, por isso, não pense que o seu teclado tá com problema :)
+/*******************************************************************************
+Autor: Carlos Henrique de Oliveira Valadão
+Componente Curricular: Algoritmos I
+Concluido em: 14/03/2020
+Declaro que este código foi elaborado por mim de forma individual e não contém nenhum
+trecho de código de outro colega ou de outro autor, tais como provindos de livros e
+apostilas, e páginas ou documentos eletrônicos da Internet. Qualquer trecho de código
+de outra autoria que não a minha está destacado com uma citação para o autor e a fonte
+do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
+******************************************************************************************/
 '''
+
 
 # Root path of script main obviously this can change with each script execution
 SCRIPT_ROOT_PATH = getcwd()
@@ -13,6 +23,7 @@ SCRIPT_ROOT_PATH = getcwd()
 NAME_USERS_FILE = "users.txt"
 # Name of directory that will storage the tasks of users
 NAME_TASKS_DIR = "tasks"
+
 
 selected_option = 0
 while selected_option != 3:
@@ -69,9 +80,8 @@ while selected_option != 3:
                 # Object of user logged in system, at some point he was dead in file users.txt
                 resurrected_user = User(login, password)
                 # Getting tasks from the logged user file
-                user_tasks = read_b(USER_TASK_FILE_PATH)
-                user_tasks = user_tasks[0]
-                resurrected_user.set_tasks(user_tasks)
+                user_task_list = read_b(USER_TASK_FILE_PATH)
+                resurrected_user.set_tasks(user_task_list)
                 sub_menu_option_selected = sub_menu()
                 while 5 != sub_menu_option_selected:
 
@@ -83,7 +93,6 @@ while selected_option != 3:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         # Getting the id of task
                         task_id = read_b(USER_INFO_FILE_PATH)
-                        task_id = task_id[0]
                         task_id += 1
                         # Making a Task object
                         new_task = Task(task_id, task_title, task_description, task_priority)
@@ -99,7 +108,6 @@ while selected_option != 3:
                     elif sub_menu_option_selected == 2:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
-                        user_task_list = user_task_list[0]
                         cls()
                         if not show_tasks(user_task_list):
                             alert("Você ainda não cadastrou tarefas!")
@@ -111,12 +119,11 @@ while selected_option != 3:
                     elif sub_menu_option_selected == 3:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
-                        user_task_list = user_task_list[0]
                         if show_tasks(user_task_list):
                             alert("Qual o ID da tarefa você deseja alterar?")
                             searched_task = read_int()
                             if find_task(user_task_list, searched_task) > -1:
-                                task_index_searched = find_task(searched_task)
+                                task_index_searched = find_task(user_task_list, searched_task)
                                 item = task_change_menu()
                                 if item == 1:
                                     modify_item = input("> ")
@@ -141,11 +148,11 @@ while selected_option != 3:
                         else:
                             alert("Você ainda não cadastrou tarefas!")
                             freeze_screen()
+
                     # If the user wants to remove a task
                     elif sub_menu_option_selected == 4:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
-                        user_task_list = user_task_list[0]
                         if show_tasks(user_task_list):
                             alert("Qual o ID da tarefa você deseja remover?")
                             remove_id = read_int()
@@ -153,6 +160,7 @@ while selected_option != 3:
                                 verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                                 # Updating the user task file of user
                                 write_b(user_task_list, USER_TASK_FILE_PATH)
+                                resurrected_user.set_tasks(user_task_list)
                                 alert("Removendo tarefa do sistema...")
                                 alert("Tarefa removida com sucesso!")
                                 freeze_screen()
@@ -178,4 +186,3 @@ while selected_option != 3:
 alert("Saindo do programa...")
 alert("Aguarde...")
 freeze_screen()
-
