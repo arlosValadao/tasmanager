@@ -4,6 +4,7 @@ from os import sep
 from pickle import dump, load
 from time import sleep
 from User import *
+from prettytable import PrettyTable
 
 '''
 sep is the char that the operating system use for to differentiate directories of files
@@ -79,7 +80,11 @@ def task_change_menu():
 # uses a function as return indicator
 # ex: (def main_menu() -> read_int)
 def sub_menu() -> int:
-    cls()
+    print('_' * 33)
+    print()
+    print("|       BEM - VINDO         |")
+    print('_' * 33)
+    print()
     print("[ 1 ] - Cadastrar nova Tarefa")
     print("[ 2 ] - Visualizar Tarefas")
     print("[ 3 ] - Alterar Tarefa")
@@ -177,7 +182,7 @@ def register_user(user: User, file_name: str) -> None:
     return None
 
 
-# Has two strings as parameter, the first is a login and the 
+# Has two strings as parameter, the first is a login and the
 # second is the name of file
 # The function verify if the login typed already is
 # inclued in the file
@@ -246,3 +251,64 @@ def make_dir(dir_name: str) -> int:
         except FileNotFoundError:
             return 0
     return 0
+
+
+# Has an id (user task id)
+# and a list (task list of user) as a parameter
+# The function search the task with entered id
+# Returns the task position on task list,
+# otherwise returns -1
+def find_task(task_list: list, id: int) -> int:
+    # Binary search algorithm
+    start = 0
+    fim = len(task_list) - 1
+    while start <= fim:
+        mid = (start + fim) // 2
+        if task_list[mid].get_id() == id:
+            return mid
+        elif id > task_list[mid].get_id():
+            start = mid + 1
+        else:
+            fim = mid - 1
+    return -1
+
+
+
+# Has an id (int) and a list (task list of user) as parameter
+# The function remove the task with id entered
+# of task list of user
+# Returns True if remove operations was successful
+# and False otherwise
+def remove_task(task_list: list, id: int) -> bool:
+    task_index_searched = find_task(task_list, id)
+    if task_index_searched > -1:
+        task_list.__delitem__(task_index_searched)
+        return True
+    return False
+
+
+# Have a list (task list of user) as parameter
+# Convert Task objects to lists and adds all
+# in a table (of PrettyTable module).
+# Show the tasks of user in table format
+def show_tasks(task_list: list) -> bool:
+    if task_list:
+        table = PrettyTable()
+        table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE"]
+        # Converting the task to lists and adding the list in table (rows)
+        for task in task_list:
+            task_converted_2_list = []
+            task_converted_2_list.append(task.get_id())
+            task_converted_2_list.append(task.get_title())
+            task_converted_2_list.append(task.get_description())
+            #task_converted_2_list.append(task.get_priority())
+            if task.get_priority() == 1:
+                task_converted_2_list.append("Alta")
+            elif task.get_priority() == 2:
+                task_converted_2_list.append("Media")
+            elif task.get_priority() == 3:
+                task_converted_2_list.append("Baixa")
+            table.add_row(task_converted_2_list)
+        print(table)
+        return True
+    return False

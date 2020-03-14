@@ -3,7 +3,7 @@ class Task:
         self.__title: str = title
         self.__description: str = description
         self.__priority: int = priority
-        self.__id = id
+        self.__id : int = id
 
 
     def get_title(self) -> str:
@@ -26,8 +26,6 @@ class Task:
     def get_priority(self) -> int:
         return self.__priority
 
-    def set_priority(self, priority: int) -> int:
-        if 4 > priority > 0:
-            self.__priority = priority
-            return 1
-        return 0
+    def set_priority(self, priority: int) -> None:
+        self.__priority = priority
+        return
