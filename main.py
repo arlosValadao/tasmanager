@@ -14,10 +14,10 @@ NAME_USERS_FILE = "users.txt"
 # Name of directory that will storage the tasks of users
 NAME_TASKS_DIR = "tasks"
 
-selected_option = 6
+selected_option = 0
 while selected_option != 3:
-    while 0 > selected_option or selected_option > 4:
-        selected_option = main_menu()
+
+    selected_option = main_menu()
     # Case the user wants register a new user in the system
     if selected_option == 1:
         while True:
@@ -112,52 +112,57 @@ while selected_option != 3:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
                         user_task_list = user_task_list[0]
-                        if not show_tasks(user_task_list):
-                        alert("Qual o ID da tarefa você deseja alterar?")
-                        searched_task = read_int()
-                        if find_task(user_task_list, searched_task) > -1:
-                            task_index_searched = find_task(searched_task)
-                            item = task_change_menu()
-                            if item == 1:
-                                modify_item = input("> ")
-                                user_task_list[task_index_searched].set_title(modify_item)
-                            elif item == 2:
-                                modify_item = input("> ")
-                                user_task_list[task_index_searched].set_description(modify_item)
-                            elif item == 3:
-                                modify_item = task_change_menu()
-                                user_task_list[task_index_searched].set_priority(modify_item)
-                            verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                            # Updating the user task file of user
-                            write_b(user_task_list, USER_TASK_FILE_PATH)
-                            resurrected_user.set_tasks(user_task_list)
-                            alert("Modificando a tarefa...")
-                            alert("Tarefa modificada com sucesso!")
-                            freeze_screen()
+                        if show_tasks(user_task_list):
+                            alert("Qual o ID da tarefa você deseja alterar?")
+                            searched_task = read_int()
+                            if find_task(user_task_list, searched_task) > -1:
+                                task_index_searched = find_task(searched_task)
+                                item = task_change_menu()
+                                if item == 1:
+                                    modify_item = input("> ")
+                                    user_task_list[task_index_searched].set_title(modify_item)
+                                elif item == 2:
+                                    modify_item = input("> ")
+                                    user_task_list[task_index_searched].set_description(modify_item)
+                                elif item == 3:
+                                    modify_item = task_change_menu()
+                                    user_task_list[task_index_searched].set_priority(modify_item)
+                                verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
+                                # Updating the user task file of user
+                                write_b(user_task_list, USER_TASK_FILE_PATH)
+                                resurrected_user.set_tasks(user_task_list)
+                                alert("Modificando a tarefa...")
+                                alert("Tarefa modificada com sucesso!")
+                                freeze_screen()
+                            else:
+                                alert("Não existe nenhuma tarefa com o ID informado")
+                                alert("Por favor, tente novamente")
+                                freeze_screen()
                         else:
-                            alert("Não existe nenhuma tarefa com o ID informado")
-                            alert("Por favor, tente novamente")
+                            alert("Você ainda não cadastrou tarefas!")
                             freeze_screen()
-
                     # If the user wants to remove a task
                     elif sub_menu_option_selected == 4:
                         verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                         user_task_list = read_b(USER_TASK_FILE_PATH)
                         user_task_list = user_task_list[0]
-                        show_tasks(user_task_list)
-                        alert("Qual o ID da tarefa você deseja remover?")
-                        remove_id = read_int()
-                        if remove_task(user_task_list, remove_id):
-                            verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
-                            # Updating the user task file of user
-                            write_b(user_task_list, USER_TASK_FILE_PATH)
-                            alert("Removendo tarefa do sistema...")
-                            alert("Tarefa removida com sucesso!")
-                            freeze_screen()
+                        if show_tasks(user_task_list):
+                            alert("Qual o ID da tarefa você deseja remover?")
+                            remove_id = read_int()
+                            if remove_task(user_task_list, remove_id):
+                                verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
+                                # Updating the user task file of user
+                                write_b(user_task_list, USER_TASK_FILE_PATH)
+                                alert("Removendo tarefa do sistema...")
+                                alert("Tarefa removida com sucesso!")
+                                freeze_screen()
+                            else:
+                                alert("Não existe nenhuma tarefa com esse id!")
+                                freeze_screen()
                         else:
-                            print()
-                            alert("\t\tNão existe nenhuma tarefa com esse id!")
+                            alert("Você ainda não cadastrou tarefas!")
                             freeze_screen()
+
                     cls()
                     sub_menu_option_selected = sub_menu()
                 #  If the user logout of account
