@@ -11,15 +11,16 @@ sep is the char that the operating system use for to differentiate directories o
 '''
 
 
-# Has a string as a parameter
+# It has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
-# Returns a hash SHA512 of string (senha) in hexadecimal format
+# Returns a hash SHA512 of string (password) in hexadecimal format
 def encrypt(password: str) -> str:
     digest = sha512()
     digest.update(password.encode('utf-8'))
     return digest.hexdigest()
 
 
+# It doesn't have parameter
 # Clear the screen
 # Returns None
 def cls() -> None:
@@ -27,10 +28,9 @@ def cls() -> None:
     return None
 
 
-# Dont has parameters
-# The function read an integer
-# a digitar um valor do tipo inteiro
-# it forces the user to enter an integer value
+# It doesn't have parameter
+# The function "read an integer"
+# It forces the user to enter an integer value
 # Returns the value typed
 def read_int() -> int:
     while True:
@@ -41,11 +41,12 @@ def read_int() -> int:
             pass
 
 
+# It doesn't have parameter
 # Main menu of system
 # Show the options for the user
 # Returns the function read_int
-# i set the return as int because i can't
-# uses a function as return indicator
+# I set the return as int because I can't
+# use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def main_menu() -> int:
     print('_' * 33)
@@ -59,13 +60,14 @@ def main_menu() -> int:
     return read_int()
 
 
-# Show the options available for the
+# It doesn't have parameter
+# Shows the options available for
 # changes of tasks
 # Returns read_int function
-# i set the return as int because i can't
-# uses a function as return indicator
+# I set the return as int because I can't
+# use a function as return indicator
 # ex: (def main_menu() -> read_int)
-def task_change_menu():
+def task_change_menu() -> int:
     cls()
     print("\033[1m[ 1 ] - Alterar titulo\033[m")
     print("\033[1m[ 2 ] - Alterar descricao\033[m")
@@ -73,11 +75,12 @@ def task_change_menu():
     return read_int()
 
 
-# Show the options available for the user
+# It doesn't have parameter
+# Shows the options available for the user
 # logged in the system
 # Returns read_int function
-# i set the return as int because i can't
-# uses a function as return indicator
+# I set the return as int because I can't
+# use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def sub_menu() -> int:
     print('_' * 33)
@@ -93,10 +96,11 @@ def sub_menu() -> int:
     return read_int()
 
 
-# Show a mini menu of priority of task to be registered
+# It doesn't have parameter
+# Shows a mini menu of priority of task to be registered
 # Returns read_int function
 # i set the return as int because i can't
-# uses a function as return indicator
+# use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def menu_priority_task() -> int:
     print("\033[1m  PRIORIDADE DA TAREFA\033[m")
@@ -107,17 +111,17 @@ def menu_priority_task() -> int:
     return read_int()
 
 
-# Dont has parameter
-# Freeze screen during 4.2 seconds
+# It doesn't have parameter
+# Freezes screen during 4.2 seconds
 # Returns None
 def freeze_screen() -> None:
     sleep(4.2)
     return None
 
 
-# Has 3 parameters, 3 strings, password of user, name of user
-# and the file name to be manipulated
-# Authenticates the user on the system
+# It has 3 parameters, 3 strings, login (name of user)
+# password (pass of user) and the file name to be readed
+# Authenticates the user on the system, respectively
 # Returns True, case the user was authenticated and False, otherwise
 def autenticate_user(login: str, password: str, file_name: str) -> bool:
     with open(file_name, encoding="utf-8") as file:
@@ -130,34 +134,36 @@ def autenticate_user(login: str, password: str, file_name: str) -> bool:
         return False
 
 
-# Has 3 string as parameter, name of directory that storage all the tasks of system,
-# the path root of script and the name of user logged
+# It has 3 strings as parameter, name of directory that storage all the tasks of system,
+# the path root of script and the name of user logged, respectively
 # The function verifies and creates (if necessary) all files necessary
 # for the correct functionament of system, post login
+# Returns None
 def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: str) -> None:
-    # Verifying existence of directory that storage the tasks of sysem
+    # Verifying existence of directory that storage the tasks of system
     make_dir(NAME_TASKS_DIR)
-    # Verifying existence of directory that storage the tasks of user registered
-    # The directory has the name of user registered
+    # Verifying existence of directory that storage the tasks of registered user
+    # The directory has the name of registered user (is sub direcotory of "NAME_TASK_DIR")
     make_dir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
     # Changing for the directory that have the name of user registered
-    # and storage yours tasks and id of tasks
+    # and storage yours tasks and tasks id
     chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
-    # Verifying existence of binary file that storage tasks and id of tasks of user registered
+    # Verifying existence of binary file that storage tasks of registered user
     if create_file(login + "_tasks.pbl", 1):
         write_b([], login + "_tasks.pbl")
-    # File that storage the value of tasks id of user
+    # Verifying existence of binary file that task id value of user
     if create_file(login + "_info.pbl", 1):
         write_b(0, login + "_info.pbl")
-    # Back to root path of script
+    # Backs to root path of script
     chdir(SCRIPT_ROOT_PATH)
     return None
 
 
-# Has a string (file name), an integer (type of file)
+# It has a string, file name, filename that will be created
+# and  an integer (type of file), respectively
 # For the file type, 0 symbolizes a file in text mode
 # and any number different of 0 symbolizes a file in binary mode
-# Returns a int, 1 case the file was successful created
+# Returns an int, 1 case the file was successful created
 # and 0 otherwise
 def create_file(file_name: str, file_type: int) -> int:
     try:
@@ -169,9 +175,9 @@ def create_file(file_name: str, file_type: int) -> int:
         return 0
 
 
-# Has as parameter a variable user of User data type
-# and a string (name of file that the informations will registered)
-# Register a user to a text file (writes the user's name and password to the file)
+# It has as parameter a user  of User data type
+# and a string (filename that the information will registered), respectively
+# Registers a user to a text file (writes the user's name and password to the file)
 # that storage all users of system
 # Returns None
 def register_user(user: User, file_name: str) -> None:
@@ -181,6 +187,7 @@ def register_user(user: User, file_name: str) -> None:
         file.write(user.get_name() + " " + encrypt(user.get_password()) + '\n')
     return None
 
+ # -------------- ok until here ----------------
 
 # Has two strings as parameter, the first is a login and the
 # second is the name of file
