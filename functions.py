@@ -206,14 +206,8 @@ def login_exists(login: str, file_name: str) -> bool:
 # Read a binary file
 # Returns "first line of file". Object
 def read_b(file_name: str) -> object:
-    file = open(file_name, "rb")
-    while True:
-        try:
-            return load(file)
-        except FileNotFoundError:
-            return []
-        finally:
-            file.close()
+    with open(file_name, "rb") as file:
+        return load(file)
 
 
 # It has a string as parameter, message
