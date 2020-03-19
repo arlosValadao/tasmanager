@@ -1,5 +1,5 @@
 from hashlib import sha512
-from os import chdir, system, name, mkdir
+from os import system, name, mkdir
 from os import sep
 from pickle import dump, load
 from time import sleep
@@ -144,17 +144,12 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
     # Verifying existence of directory that storage the tasks of registered user
     # The directory has the name of registered user (is sub direcotory of "NAME_TASK_DIR")
     make_dir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
-    # Changing for the directory that have the name of user registered
-    # and storage yours tasks and tasks id
-    chdir(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login)
     # Verifying existence of binary file that storage tasks of registered user
-    if create_file(login + "_tasks.pbl", 1):
-        write_b([], login + "_tasks.pbl")
+    if create_file(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_tasks.pbl", 1):
+        write_b([], SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_tasks.pbl")
     # Verifying existence of binary file that task id value of user
-    if create_file(login + "_info.pbl", 1):
-        write_b(0, login + "_info.pbl")
-    # Backs to root path of script
-    chdir(SCRIPT_ROOT_PATH)
+    if create_file(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl", 1):
+        write_b(0, SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login +sep + login + "_info.pbl")
     return
 
 

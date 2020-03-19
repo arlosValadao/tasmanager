@@ -80,6 +80,7 @@ while exit != "s":
                     USER_INFO_FILE_PATH = SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl"
                     # User object logged in system, at some point he was dead in file users.txt
                     resurrected_user = User(login, password)
+                    verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                     # Getting tasks from the logged user file
                     user_task_list = read_b(USER_TASK_FILE_PATH)
                     resurrected_user.set_tasks(user_task_list)
