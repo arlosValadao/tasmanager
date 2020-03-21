@@ -4,8 +4,8 @@ from pickle import dump, load
 from time import sleep
 from User import *
 from prettytable import PrettyTable
-# Criar as funcoes usando o exists da classe path, pois é melhor do que ficar gerando erro
-# e tratando sem necessidade
+
+
 '''
 sep is the char that the operating system use for to differentiate directories of files
 '''
