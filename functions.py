@@ -1,11 +1,11 @@
 from hashlib import sha512
-from os import system, name, mkdir
-from os import sep
+from os import system, name, mkdir, sep, path
 from pickle import dump, load
 from time import sleep
 from User import *
 from prettytable import PrettyTable
-
+# Criar as funcoes usando o exists da classe path, pois é melhor do que ficar gerando erro
+# e tratando sem necessidade
 '''
 sep is the char that the operating system use for to differentiate directories of files
 '''
@@ -132,6 +132,15 @@ def autenticate_user(login: str, password: str, file_name: str) -> bool:
         return False
 
 
+# It has a string (filename) as parameter
+# The function verify file existence
+# Returns True if exists and False otherwise
+def file_exists(file_name: str) -> bool:
+    if path.exists(file_name):
+        return True
+    return False
+
+
 # It has 3 strings as parameter, name of directory that storage all the tasks of system,
 # the path root of script and the name of user logged, respectively
 # The function verifies and creates (if necessary) all files necessary
@@ -159,14 +168,12 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
 # Returns an int, 1 case the file was successful created
 # and 0 otherwise
 def create_file(file_name: str, file_type: int) -> int:
-    try:
+    if not file_exists(file_name):
         # Conditional assignment
         file = open(file_name, 'x') if file_type == 0 else open(file_name, 'xb')
         file.close()
         return 1
-    except FileExistsError:
-        return 0
-
+    return 0
 
 # It has as parameter a user  of User data type
 # and a string (filename that the information will register), respectively
@@ -230,17 +237,10 @@ def write_b(value, file_name: str) -> None:
 # otherwise, when already exists the file or
 # the name path is invalid
 def make_dir(dir_name: str) -> int:
-    if dir_name:
-        try:
-            # Creating the directory
-            mkdir(dir_name)
-            return 1
-        # Case the directory already exists
-        except FileExistsError:
-            return 0
-        # Case the path doesnt exists
-        except FileNotFoundError:
-            return 0
+    if dir_name and not file_exists(dir_name):
+        # Creating the directory
+        mkdir(dir_name)
+        return 1
     return 0
 
 

@@ -135,15 +135,20 @@ while exit != "s":
                                         item = task_change_menu()
                                         if 0 < item < 4:
                                             break
+                                    # If user wants modify task title
                                     if item == 1:
                                         modify_item = input("Digite > ")
                                         modify_task(user_task_list, task_index_searched, modify_item, \
                                                     user_task_list[task_index_searched].get_description(), \
                                                     user_task_list[task_index_searched].get_priority())
+
+                                    # If user wants modify task description
                                     elif item == 2:
                                         modify_item = input("Digite > ")
                                         modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
                                                     .get_title(), modify_item, user_task_list[task_index_searched].get_priority())
+
+                                    # If user wants modify task priority
                                     elif item == 3:
                                         modify_item = input("Digite > ")
                                         modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
