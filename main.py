@@ -129,27 +129,30 @@ while exit != "s":
                             if show_tasks(user_task_list):
                                 alert("Qual o ID da tarefa você deseja alterar?")
                                 searched_task = read_int()
-                                if find_task(user_task_list, searched_task) > -1:
-                                    task_index_searched = find_task(user_task_list, searched_task)
+                                task_index_searched = find_task(user_task_list, searched_task)
+                                if task_index_searched > -1:
                                     while True:
                                         item = task_change_menu()
                                         if 0 < item < 4:
                                             break
                                     if item == 1:
                                         modify_item = input("Digite > ")
-                                        user_task_list[task_index_searched].set_title(modify_item)
+                                        modify_task(user_task_list, task_index_searched, modify_item, \
+                                                    user_task_list[task_index_searched].get_description(), \
+                                                    user_task_list[task_index_searched].get_priority())
                                     elif item == 2:
                                         modify_item = input("Digite > ")
-                                        user_task_list[task_index_searched].set_description(modify_item)
+                                        modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
+                                                    .get_title(), modify_item, user_task_list[task_index_searched].get_priority())
                                     elif item == 3:
-                                        modify_item = task_change_menu()
-                                        user_task_list[task_index_searched].set_priority(modify_item)
+                                        modify_item = input("Digite > ")
+                                        modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
+                                                    .get_title(), user_task_list[task_index_searched].get_description(), \
+                                                    modify_item)
                                     verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                                     # Updating user task file
                                     write_b(user_task_list, USER_TASK_FILE_PATH)
                                     resurrected_user.set_tasks(user_task_list)
-                                    alert("Modificando a tarefa...")
-                                    alert("Tarefa modificada com sucesso!")
                                     freeze_screen()
                                 else:
                                     alert("Não existe nenhuma tarefa com o ID informado")

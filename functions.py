@@ -67,7 +67,6 @@ def main_menu() -> int:
 # use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def task_change_menu() -> int:
-    cls()
     print("\033[1m[ 1 ] - Alterar titulo\033[m")
     print("\033[1m[ 2 ] - Alterar descricao\033[m")
     print("\033[1m[ 3 ] - Alterar prioridade\033[m")
@@ -282,24 +281,38 @@ def remove_task(task_list: list, id: int) -> bool:
 # Convert Task objects to lists and adds all
 # in a table (of PrettyTable module).
 # Show the tasks of user in table format
+# Returns True if operation was successful
+# and False otherwise
 def show_tasks(task_list: list) -> bool:
     if task_list:
         table = PrettyTable()
         table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE"]
-        # Converting the task to lists and adding the list in table (rows)
+        # "Converting" the task to lists and adding the list in table (rows)
         for task in task_list:
-            task_converted_2_list = []
-            task_converted_2_list.append(task.get_id())
-            task_converted_2_list.append(task.get_title())
-            task_converted_2_list.append(task.get_description())
-            # Task_converted_2_list.append(task.get_priority())
             if task.get_priority() == 1:
-                task_converted_2_list.append("Alta")
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Alta"])
             elif task.get_priority() == 2:
-                task_converted_2_list.append("Media")
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Media"])
             else:
-                task_converted_2_list.append("Baixa")
-            table.add_row(task_converted_2_list)
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Baixa"])
         print(table)
         return True
     return False
+
+
+
+# It has a list (user task list), task_id, tile, description
+# and priority as parameter,
+# The function modify a task, it overwrites information
+#  of task searched in task list
+# Returns True if operation was successful
+# and False otherwise
+def modify_task(task_list: str, task_index: int, title: str, description: str, proiority: str) -> None:
+    modified_task = task_list[task_index]
+    modified_task.set_title(title)
+    modified_task.set_description(description)
+    modified_task.set_priority(proiority)
+    alert("\tTAREFA MODIFICADA:")
+    show_tasks([modified_task])
+    return
+
