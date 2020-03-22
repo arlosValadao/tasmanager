@@ -58,7 +58,7 @@ while exit != "y":
             # If invalid nickname
             else:
                 alert("Invalid nickname")
-                alert("Your nickname must contain only alphanumeric characters")
+                alert("Your nickname must contain only alphanumeric characters and underline")
                 freeze_screen()
 
 
