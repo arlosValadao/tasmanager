@@ -175,6 +175,7 @@ def create_file(file_name: str, file_type: int) -> int:
         return 1
     return 0
 
+
 # It has as parameter a user  of User data type
 # and a string (filename that the information will register), respectively
 # Registers a user to a text file (writes the user's name and password to the file)
@@ -300,7 +301,6 @@ def show_tasks(task_list: list) -> bool:
     return False
 
 
-
 # It has a list (user task list), task_id, tile, description
 # and priority as parameter,
 # The function modify a task, it overwrites information
@@ -315,4 +315,3 @@ def modify_task(task_list: str, task_index: int, title: str, description: str, p
     alert("\tChanged  Task:")
     show_tasks([modified_task])
     return
-
