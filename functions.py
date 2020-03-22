@@ -50,12 +50,12 @@ def read_int() -> int:
 def main_menu() -> int:
     print('_' * 33)
     print()
-    print("|     GERENCIADOR DE TAREFAS    |")
+    print("|     TASK MANAGER    |")
     print('_' * 33)
     print()
-    print("[ 1 ] - Cadastrar novo usuario")
-    print('[ 2 ] - Logar no sistema')
-    print("[ 3 ] - Sair do sistema")
+    print("[ 1 ] - Register new user")
+    print('[ 2 ] - Login the system')
+    print("[ 3 ] - Exit of system")
     return read_int()
 
 
@@ -67,9 +67,9 @@ def main_menu() -> int:
 # use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def task_change_menu() -> int:
-    print("\033[1m[ 1 ] - Alterar titulo\033[m")
-    print("\033[1m[ 2 ] - Alterar descricao\033[m")
-    print("\033[1m[ 3 ] - Alterar prioridade\033[m")
+    print("\033[1m[ 1 ] - Change title\033[m")
+    print("\033[1m[ 2 ] - Change description\033[m")
+    print("\033[1m[ 3 ] - Change priority\033[m")
     return read_int()
 
 
@@ -83,14 +83,14 @@ def task_change_menu() -> int:
 def sub_menu() -> int:
     print('_' * 33)
     print()
-    print("|       BEM - VINDO         |")
+    print("|       WELLCOME         |")
     print('_' * 33)
     print()
-    print("[ 1 ] - Cadastrar nova Tarefa")
-    print("[ 2 ] - Visualizar Tarefas")
-    print("[ 3 ] - Alterar Tarefa")
-    print("[ 4 ] - Excluir Tarefa")
-    print("[ 5 ] - Sair")
+    print("[ 1 ] - Register new task")
+    print("[ 2 ] - See tasks")
+    print("[ 3 ] - Change task")
+    print("[ 4 ] - Remove task")
+    print("[ 5 ] - sign out account")
     return read_int()
 
 
@@ -101,11 +101,11 @@ def sub_menu() -> int:
 # use a function as return indicator
 # ex: (def main_menu() -> read_int)
 def menu_priority_task() -> int:
-    print("\033[1m  PRIORIDADE DA TAREFA\033[m")
+    print("\033[1m  TASK  PRIORITY\033[m")
     print()
-    print("\033[1m[ 1 ] - Prioridade Alta\033[m")
-    print("\033[1m[ 2 ] - Prioridade Media\033[m")
-    print("\033[1m[ 3 ] - Prioridade Baixa\033[m")
+    print("\033[1m[ 1 ] - Higha\033[m")
+    print("\033[1m[ 2 ] - Medium\033[m")
+    print("\033[1m[ 3 ] - Low\033[m")
     return read_int()
 
 
@@ -286,15 +286,15 @@ def remove_task(task_list: list, id: int) -> bool:
 def show_tasks(task_list: list) -> bool:
     if task_list:
         table = PrettyTable()
-        table.field_names = ["ID", "TITULO", "DESCRICAO", "PRIORIDADE"]
+        table.field_names = ["ID", "TITLE", "DESCRIPTION", "PRIORITY"]
         # "Converting" the task to lists and adding the list in table (rows)
         for task in task_list:
             if task.get_priority() == 1:
-                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Alta"])
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "High"])
             elif task.get_priority() == 2:
-                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Media"])
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Medium"])
             else:
-                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Baixa"])
+                table.add_row([task.get_id(), task.get_title(), task.get_description(), "Low"])
         print(table)
         return True
     return False
@@ -312,7 +312,7 @@ def modify_task(task_list: str, task_index: int, title: str, description: str, p
     modified_task.set_title(title)
     modified_task.set_description(description)
     modified_task.set_priority(proiority)
-    alert("\tTAREFA MODIFICADA:")
+    alert("\tChanged  Task:")
     show_tasks([modified_task])
     return
 
