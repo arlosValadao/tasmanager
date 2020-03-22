@@ -27,14 +27,14 @@ NAME_TASKS_DIR = "tasks"
 
 
 exit = 'n'
-while exit != "s":
+while exit != "y":
     selected_option = 0
     while selected_option != 3:
         cls()
         selected_option = main_menu()
         # If the user wants register a user on system
         if selected_option == 1:
-            nick = input("\033[1mEntre com o seu nick: \033[m")
+            nick = input("\033[1mType your name: \033[m")
             # Validating the nickname typed
             if nick.strip().isidentifier():
                 nick = nick.strip()
@@ -42,36 +42,36 @@ while exit != "s":
                 create_file(NAME_USERS_FILE, 0)
                 # Verifying existence of typed nickname on system
                 if login_exists(nick, NAME_USERS_FILE):
-                    alert("O nick informado já está cadastrado no sistema")
-                    alert("Por favor, tente outro nick")
+                    alert("The entered nick already exists int the system")
+                    alert("Please, try again")
                     freeze_screen()
                 else:
-                    password = input("\033[1mEntre com a sua senha: \033[m")
+                    password = input("\033[1mType your password: \033[m")
                     # If user information was successful coleted
-                    alert("Cadastrando...")
+                    alert("Registering user...")
                     # Making User object
                     new_user = User(nick, password)
                     # Registering the user on system
                     register_user(new_user, NAME_USERS_FILE)
-                    alert("Usuario cadastrado com sucesso!")
+                    alert("User successfully registered!")
                     freeze_screen()
             # If invalid nickname
             else:
-                alert("Nick inválido")
-                alert("O seu nick deve ser composto somente por caracteres alfanumericos e underline")
+                alert("Invalid nickname")
+                alert("Your nickname must contain only alphanumeric characters")
                 freeze_screen()
 
 
         # If the user want log in system
         elif selected_option == 2:
-                login = input("\033[1mDigite o seu login: \033[m")
-                password = input("\033[1mDigite a sua senha: \033[m")
-                alert("Logando no sistema...")
+                login = input("\033[1mType your name: \033[m")
+                password = input("\033[1mType your password: \033[m")
+                alert("Logging into the system...")
                 # Verifying file existence that storages system users
                 create_file(NAME_USERS_FILE, 0)
                 # Authenticating  the user in the system
                 if autenticate_user(login, password, NAME_USERS_FILE):
-                    alert("Login realizado com sucesso!")
+                    alert("Login was successful!")
                     freeze_screen()
                     verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                     # User task file path
@@ -90,8 +90,8 @@ while exit != "s":
 
                         # If user wants create a task
                         if sub_menu_option_selected == 1:
-                            task_title = input("\033[1mTitulo da tarefa: \033[m")
-                            task_description = input("\033[1mDescricao da tarefa: \033[m")
+                            task_title = input("\033[1mTask title: \033[m")
+                            task_description = input("\033[1mTask description: \033[m")
                             while True:
                                 task_priority = menu_priority_task()
                                 if 0 < task_priority < 4:
@@ -107,8 +107,8 @@ while exit != "s":
                             # Updating user task file
                             write_b(resurrected_user.get_tasks(), USER_TASK_FILE_PATH)
                             write_b(task_id, USER_INFO_FILE_PATH)
-                            alert("Criando tarefa...")
-                            alert("Tarefa criada com sucesso!")
+                            alert("Making task...")
+                            alert("Task created successfully")
                             freeze_screen()
 
                         # If user wants to see your tasks
@@ -117,7 +117,7 @@ while exit != "s":
                             user_task_list = read_b(USER_TASK_FILE_PATH)
                             cls()
                             if not show_tasks(user_task_list):
-                                alert("Você ainda não cadastrou tarefas!")
+                                alert("You have not yet registered a task!")
                             print()
                             alert("\t\t </ENTER> TO CONTINUE")
                             input()
@@ -127,7 +127,7 @@ while exit != "s":
                             verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                             user_task_list = read_b(USER_TASK_FILE_PATH)
                             if show_tasks(user_task_list):
-                                alert("Qual o ID da tarefa você deseja alterar?")
+                                alert("Task id you want to change?")
                                 searched_task = read_int()
                                 task_index_searched = find_task(user_task_list, searched_task)
                                 if task_index_searched > -1:
@@ -137,20 +137,20 @@ while exit != "s":
                                             break
                                     # If user wants modify task title
                                     if item == 1:
-                                        modify_item = input("Digite > ")
+                                        modify_item = input("Type > ")
                                         modify_task(user_task_list, task_index_searched, modify_item, \
                                                     user_task_list[task_index_searched].get_description(), \
                                                     user_task_list[task_index_searched].get_priority())
 
                                     # If user wants modify task description
                                     elif item == 2:
-                                        modify_item = input("Digite > ")
+                                        modify_item = input("Type > ")
                                         modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
                                                     .get_title(), modify_item, user_task_list[task_index_searched].get_priority())
 
                                     # If user wants modify task priority
                                     elif item == 3:
-                                        modify_item = input("Digite > ")
+                                        modify_item = input("Type > ")
                                         modify_task(user_task_list, task_index_searched, user_task_list[task_index_searched] \
                                                     .get_title(), user_task_list[task_index_searched].get_description(), \
                                                     modify_item)
@@ -160,11 +160,11 @@ while exit != "s":
                                     resurrected_user.set_tasks(user_task_list)
                                     freeze_screen()
                                 else:
-                                    alert("Não existe nenhuma tarefa com o ID informado")
-                                    alert("Por favor, tente novamente")
+                                    alert("There is no task with this id!")
+                                    alert("Please, try again")
                                     freeze_screen()
                             else:
-                                alert("Você ainda não cadastrou tarefas!")
+                                alert("You have not yet registered tasks!")
                                 freeze_screen()
 
                         # If user wants to remove a task
@@ -172,36 +172,39 @@ while exit != "s":
                             verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                             user_task_list = read_b(USER_TASK_FILE_PATH)
                             if show_tasks(user_task_list):
-                                alert("Qual o ID da tarefa você deseja remover?")
-                                remove_id = read_int()
+                                alert("Task id you want to remove?")
+                                while True:
+                                    remove_id = read_int()
+                                    if 0 < remove_id < 4:
+                                        break
                                 if remove_task(user_task_list, remove_id):
                                     verify_files_post_login(NAME_TASKS_DIR, SCRIPT_ROOT_PATH, login)
                                     # Updating user task file
                                     write_b(user_task_list, USER_TASK_FILE_PATH)
                                     resurrected_user.set_tasks(user_task_list)
-                                    alert("Removendo tarefa do sistema...")
-                                    alert("Tarefa removida com sucesso!")
+                                    alert("Removing task...")
+                                    alert("Task removed!")
                                     freeze_screen()
                                 else:
-                                    alert("Não existe nenhuma tarefa com esse id!")
+                                    alert("There is no task with this id!")
                                     freeze_screen()
                             else:
-                                alert("Você ainda não cadastrou tarefas!")
+                                alert("You have no yet registered tasks!")
                                 freeze_screen()
 
                         cls()
                         sub_menu_option_selected = sub_menu()
                     # If user logout of account
-                    alert("Deslogando da conta... \033[m")
-                    alert("Aguarde...")
+                    alert("Logging out of account... \033[m")
+                    alert("Wait...")
                     freeze_screen()
                 # If login and/or password incorrect entered
                 else:
-                    alert("Login e/ou senha incorretos!")
+                    alert("Login and/or password is incorrects!")
                     freeze_screen()
-    alert("Você realmente deseja fechar o programa? (s / n)")
-    exit = input("> ")
+    alert("Do you wnat to leave? (s / n)")
+    exit = input("> ").strip().lower()
 # Exiting the system
-alert("Saindo do programa...")
-alert("Aguarde...")
+alert("Exiting the program...")
+alert("Wait...")
 freeze_screen()
