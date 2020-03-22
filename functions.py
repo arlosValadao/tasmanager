@@ -50,7 +50,7 @@ def read_int() -> int:
 def main_menu() -> int:
     print('_' * 33)
     print()
-    print("|     TASK MANAGER        |")
+    print("|     TASK MANAGER           |")
     print('_' * 33)
     print()
     print("[ 1 ] - Register new user")
