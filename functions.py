@@ -103,7 +103,7 @@ def sub_menu() -> int:
 def menu_priority_task() -> int:
     print("\033[1m  TASK  PRIORITY\033[m")
     print()
-    print("\033[1m[ 1 ] - Higha\033[m")
+    print("\033[1m[ 1 ] - High\033[m")
     print("\033[1m[ 2 ] - Medium\033[m")
     print("\033[1m[ 3 ] - Low\033[m")
     return read_int()
@@ -207,7 +207,7 @@ def login_exists(login: str, file_name: str) -> bool:
 # It has a string as parameter, filename to  be read
 # Read a binary file
 # Returns "first line of file". Object
-def read_b(file_name: str) -> object:
+def read_b(file_name: str):
     with open(file_name, "rb") as file:
         return load(file)
 

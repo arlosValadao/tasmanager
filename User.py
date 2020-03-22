@@ -22,7 +22,7 @@ class User:
         self.__tasks = tasks
         return
 
-    def set_task(self, task: Task) -> None:
+    def add_task(self, task: Task) -> None:
         # Inserting tasks in decreasing priority mode from high to low priority
         # (taking into account that tasks can have high, medium or low priority)
         # and in increasing order of their ids
