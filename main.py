@@ -202,7 +202,7 @@ while exit != "y":
                 else:
                     alert("Login and/or password is incorrects!")
                     freeze_screen()
-    alert("Do you wnat to leave? (s / n)")
+    alert("Do you wnat to leave? (y / n)")
     exit = input("> ").strip().lower()
 # Exiting the system
 alert("Exiting the program...")
