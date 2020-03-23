@@ -307,11 +307,11 @@ def show_tasks(task_list: list) -> bool:
 #  of task searched in task list
 # Returns True if operation was successful
 # and False otherwise
-def modify_task(task_list: str, task_index: int, title: str, description: str, proiority: str) -> None:
+def modify_task(task_list: str, task_index: int, title: str, description: str, priority: int) -> None:
     modified_task = task_list[task_index]
     modified_task.set_title(title)
     modified_task.set_description(description)
-    modified_task.set_priority(proiority)
+    modified_task.set_priority(priority)
     alert("\tChanged  Task:")
     show_tasks([modified_task])
     return
