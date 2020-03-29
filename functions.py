@@ -265,7 +265,7 @@ def find_task(task_list: list, id: int) -> int:
 def remove_task(task_list: list, id: int) -> bool:
     task_index_searched = find_task(task_list, id)
     if task_index_searched > -1:
-        task_list.__delitem_f_(task_index_searched)
+        task_list.__delitem__(task_index_searched)
         return True
     return False
 
@@ -299,14 +299,15 @@ def show_tasks(task_list: list) -> bool:
 #  of task searched in task list
 # Returns True if operation was successful
 # and False otherwise
-def modify_task(task_list: str, task_index: int, title: str, description: str, priority: int) -> None:
+def modify_task(task_list: list, task_index: int, title: str, description: str, priority: int) -> None:
     modified_task = task_list.pop(task_index)
     modified_task.set_title(title)
     modified_task.set_description(description)
     modified_task.set_priority(priority)
     i = 0
-    while (i < len(task_list) - 1):
-        if task_list[i].get_priority() > task_list[i+1].get_priority():
+    task_list_len = len(task_list)
+    while i < task_list_len:
+        if task_list[i].get_priority() > modified_task.get_priority():
             break
         i += 1
     task_list.insert(i, modified_task)
