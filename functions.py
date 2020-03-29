@@ -207,7 +207,7 @@ def login_exists(login: str, file_name: str) -> bool:
 # It has a string as parameter, filename to  be read
 # Read a binary file
 # Returns "first line of file". Object
-def read_b(file_name: str):
+def read_b(file_name: str) -> object:
     with open(file_name, "rb") as file:
         return load(file)
 
@@ -251,17 +251,9 @@ def make_dir(dir_name: str) -> int:
 # Returns the task position on task list,
 # otherwise returns -1
 def find_task(task_list: list, id: int) -> int:
-    # Binary search algorithm
-    start = 0
-    fim = len(task_list) - 1
-    while start <= fim:
-        mid = (start + fim) // 2
-        if task_list[mid].get_id() == id:
-            return mid
-        elif id > task_list[mid].get_id():
-            start = mid + 1
-        else:
-            fim = mid - 1
+    for i in range(len(task_list)):
+    	if task_list[i].get_id() == id:
+    		return i
     return -1
 
 
@@ -273,7 +265,7 @@ def find_task(task_list: list, id: int) -> int:
 def remove_task(task_list: list, id: int) -> bool:
     task_index_searched = find_task(task_list, id)
     if task_index_searched > -1:
-        task_list.__delitem__(task_index_searched)
+        task_list.__delitem_f_(task_index_searched)
         return True
     return False
 
@@ -303,7 +295,7 @@ def show_tasks(task_list: list) -> bool:
 
 # It has a list (user task list), task_id, tile, description
 # and priority as parameter
-# The function modify a task, it overwrites information
+# The function modify and order a task, it overwrites information
 #  of task searched in task list
 # Returns True if operation was successful
 # and False otherwise

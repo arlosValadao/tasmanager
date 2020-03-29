@@ -1,11 +1,6 @@
-from functions import *
-from User import *
-from Task import *
-from os import getcwd, sep
-
 '''
 /*******************************************************************************
-Autor: UNKNOW
+Autor: Carlos Henrique de Oliveira Valadão
 Componente Curricular: Algoritmos I
 Concluido em: 14/03/2020
 Declaro que este código foi elaborado por mim de forma individual e não contém nenhum
@@ -15,6 +10,13 @@ de outra autoria que não a minha está destacado com uma citação para o autor
 do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
 ******************************************************************************************/
 '''
+
+
+from functions import *
+from User import *
+from Task import *
+from os import getcwd, sep
+
 
 # Root path of script main obviously this can change with each script execution
 SCRIPT_ROOT_PATH = getcwd()
@@ -113,7 +115,7 @@ while exits != "y":
                         user_task_list = read_b(USER_TASK_FILE_PATH)
                         cls()
                         if not show_tasks(user_task_list):
-                            alert("You have not yet registered a task!")
+                            alert("You haven't yet registered a task!")
                         print()
                         alert("\t\t </ENTER> TO CONTINUE")
                         input()
@@ -165,7 +167,7 @@ while exits != "y":
                                 alert("Please, try again")
                                 freeze_screen()
                         else:
-                            alert("You have not yet registered tasks!")
+                            alert("You haven't yet registered tasks!")
                             freeze_screen()
 
                     # If user wants to remove a task
@@ -188,7 +190,7 @@ while exits != "y":
                                 alert("Please, try again")
                                 freeze_screen()
                         else:
-                            alert("You have no yet registered tasks!")
+                            alert("You haven't yet registered tasks!")
                             freeze_screen()
 
                     cls()

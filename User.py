@@ -5,15 +5,16 @@ class User:
         self.__password: str = password
         self.__tasks: list = []
 
+
     def get_name(self) -> str:
         return self.__name
-
-    def get_password(self) -> str:
-        return self.__password
 
     def set_name(self, name: str) -> None:
             self.__name = name
             return
+
+    def get_password(self) -> str:
+        return self.__password
 
     def get_tasks(self) -> list:
         return self.__tasks

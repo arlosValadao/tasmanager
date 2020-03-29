@@ -3,7 +3,7 @@ class Task:
         self.__title: str = title
         self.__description: str = description
         self.__priority: int = priority
-        self.__id : int = id
+        self.__id: int = id
 
 
     def get_title(self) -> str:
