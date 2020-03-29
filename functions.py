@@ -6,10 +6,6 @@ from User import *
 from prettytable import PrettyTable
 
 
-'''
-sep is the char that the operating system use for to differentiate directories of files
-'''
-
 # It has a string as a parameter
 # Encrypt the string using SHA512 algorithm of encryption
 # Returns a hash SHA512 of string (password) in hexadecimal format
@@ -157,7 +153,7 @@ def verify_files_post_login(NAME_TASKS_DIR: str, SCRIPT_ROOT_PATH: str, login: s
         write_b([], SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_tasks.pbl")
     # Verifying existence of binary file that task id value of user
     if create_file(SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl", 1):
-        write_b(0, SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login +sep + login + "_info.pbl")
+        write_b(0, SCRIPT_ROOT_PATH + sep + NAME_TASKS_DIR + sep + login + sep + login + "_info.pbl")
     return
 
 
@@ -207,7 +203,7 @@ def login_exists(login: str, file_name: str) -> bool:
 # It has a string as parameter, filename to  be read
 # Read a binary file
 # Returns "first line of file". Object
-def read_b(file_name: str) -> object:
+def read_b(file_name: str):
     with open(file_name, "rb") as file:
         return load(file)
 
@@ -250,10 +246,10 @@ def make_dir(dir_name: str) -> int:
 # The function search the task with entered id
 # Returns the task position on task list,
 # otherwise returns -1
-def find_task(task_list: list, id: int) -> int:
+def find_task(task_list: list, task_id: int) -> int:
     for i in range(len(task_list)):
-    	if task_list[i].get_id() == id:
-    		return i
+        if task_list[i].get_id() == task_id:
+            return i
     return -1
 
 
@@ -262,8 +258,8 @@ def find_task(task_list: list, id: int) -> int:
 # of task list of user
 # Returns True if remove operations was successful
 # and False otherwise
-def remove_task(task_list: list, id: int) -> bool:
-    task_index_searched = find_task(task_list, id)
+def remove_task(task_list: list, task_id: int) -> bool:
+    task_index_searched = find_task(task_list, task_id)
     if task_index_searched > -1:
         task_list.__delitem__(task_index_searched)
         return True

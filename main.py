@@ -1,4 +1,4 @@
-'''
+"""
 /*******************************************************************************
 Autor: Carlos Henrique de Oliveira Valadão
 Componente Curricular: Algoritmos I
@@ -9,7 +9,7 @@ apostilas, e páginas ou documentos eletrônicos da Internet. Qualquer trecho de
 de outra autoria que não a minha está destacado com uma citação para o autor e a fonte
 do código, e estou ciente que estes trechos não serão considerados para fins de avaliação.
 ******************************************************************************************/
-'''
+"""
 
 
 from functions import *
