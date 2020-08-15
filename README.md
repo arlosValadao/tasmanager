@@ -4,7 +4,7 @@ It was a project of a discipline from my university.
 
 # Installation
 
-You need
+You will need
 - [Python 3.6+](https://www.python.org/downloads/)
 - [prettytable](https://pypi.org/project/PrettyTable/)
 
