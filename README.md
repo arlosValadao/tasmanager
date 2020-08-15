@@ -7,7 +7,6 @@ It was a project of a discipline from my university.
 You need
 - [Python 3.6+](https://www.python.org/downloads/)
 - [prettytable](https://pypi.org/project/PrettyTable/)
-to run it.
 
 # Usage
 
